@@ -124,7 +124,32 @@ function addTransactionDOM(transaction) {
   `;
   
   list.appendChild(item);
+
+  // Add touch support
+  item.addEventListener('touchstart', function() {
+      this.classList.add('touched');
+  });
+  item.addEventListener('touchend', function() {
+      this.classList.remove('touched');
+  });
 }
+
+// Debounce function to prevent excessive API calls
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Apply debounce to currency conversion
+const debouncedCurrencyUpdate = debounce(updateCurrencyDisplay, 300);
+currencySelect.addEventListener('change', (e) => debouncedCurrencyUpdate(e.target.value));
 
 // Update balance, income and expense
 function updateValues() {
