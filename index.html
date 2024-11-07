@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="styles/indexstyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap " rel="stylesheet">
+  </head>
+  <body>
+
+    <h2>Treasure Keeper</h2>
+    <div class="container">
+
+      <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="statistics.html">Statistics</a>
+        <a href="calender.html">Calender</a>
+        <a href="aboutus.html">About Us</a>
+      </div>
+
+      <h4>Your Balance</h4>
+      <h1 id="balance">&#8377;0.00</h1>
+
+<div class="currency-control">
+  <label for="currency-select">Display Currency:</label>
+  <select id="currency-select" class="currency-select">
+      <option value="USD" selected>US Dollar ($)</option>
+      <option value="CAD">Canadian Dollar (C$)</option>
+      <option value="SGD">Singapore Dollar (S$)</option>
+      <option value="NZD">New Zealand Dollar (NZ$)</option>
+      <option value="AUD">Australian Dollar (A$)</option>
+      <option value="EUR">Euro (€)</option>
+      <option value="GBP">British Pound (£)</option>
+      <option value="JPY">Japanese Yen (¥)</option>
+      <option value="KRW">South Korean Won (₩)</option>
+      <option value="CNY">Chinese Yuan (¥)</option>
+      <option value="INR">Indian Rupee (₹)</option>
+      <option value="RUB">Russian Ruble (₽)</option>
+      <option value="ZAR">South African Rand (R)</option>
+      <option value="IDR">Indonesian Rupiah (Rp)</option>
+      <option value="THB">Thai Baht (฿)</option>
+      <option value="MYR">Malaysian Ringgit (RM)</option>
+  </select>
+</div>
+
+      <div class="inc-exp-container">
+        <div>
+          <h4>Income</h4>
+          <p id="money-plus" class="money-plus">
+            +&#8377;0.00
+          </p>
+        </div>
+
+        <div>
+          <h4>Expense</h4>
+          <p id="money-minus" class="money-minus">
+            -&#8377;0.00
+          </p>
+        </div>
+
+      </div>
+
+      <h3>History</h3>
+      <ul id="list" class="list">
+        <li class="minus">
+          <button class="delete-btn"></button>
+        </li>
+      </ul>
+
+      <h3>Add New Transaction</h3>
+      <form id="form">
+
+        <div class="form-control">
+          <label for="datetime">Date and Time</label>
+          <input type="datetime-local" id="datetime" name="datetime" required>
+        </div>
+
+          <div class="form-control">
+              <label for="text">Description</label>
+              <input type="text" id="text" placeholder="Enter description"/>
+          </div>
+
+          <div class="form-control">
+            <label for="category">Category</label>
+            <select id="category">
+                <option value="">Select Category</option>
+                <option value="Food">Food & Dining</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Bills">Bills & Utilities</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Education">Education</option>
+                <option value="Gift">Gift</option>
+                <option value="Salary">Salary</option>
+                <option value="Investment">Investment</option>
+                <option value="Bonus">Bonus</option>
+                <option value="Allowance">Allowance</option>
+                <option value="Others">Others</option>
+            </select>
+        </div>
+
+          <div class="form-control">
+              <label for="type">Type</label>
+              <select id="type">
+                  <option value="income">Income</option>
+                  <option value="expense">Expense</option>
+              </select>
+          </div>
+
+          <div class="form-control">
+              <label for="amount">Amount</label>
+              <input type="number" id="amount" placeholder="Enter amount" min="0" step="0.01"> 
+          </div>
+          <button class="btn">Add Transaction</button>
+      </form>
+    </div>
+
+    <script src="scripts/indexscript.js"></script>
+  </body>
+</html>
