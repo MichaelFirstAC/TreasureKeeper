@@ -108,21 +108,21 @@ function formatDateTime(dateString) {
 
 // Add transaction to DOM
 function addTransactionDOM(transaction) {
-  const sign = transaction.amount < 0 ? "-" : "+";
-  const item = document.createElement("li");
+const sign = transaction.amount < 0 ? "-" : "+";
+const item = document.createElement("li");
 
-  item.classList.add(transaction.amount < 0 ? "minus" : "plus");
-  
-  item.innerHTML = `
-      <button class="delete-btn" onclick="removeTransaction(${transaction.id})"></button>
-      <div class="transaction-details">
-          <span class="transaction-text">${transaction.text}</span>
-          <span class="category-tag">${transaction.category}</span>
-          <span class="transaction-amount">${currencySymbols[currentCurrency]}${formatNumber(Math.abs(transaction.amount))}</span>
-          <span class="transaction-date">${formatDateTime(transaction.datetime)}</span>
-      </div>
-  `;
-  
+item.classList.add(transaction.amount < 0 ? "minus" : "plus");
+
+item.innerHTML = `
+    <button class="delete-btn" onclick="removeTransaction(${transaction.id})"></button>
+    <div class="transaction-details">
+        <span class="transaction-text">${transaction.text}</span>
+        <span class="category-tag">${transaction.category}</span>
+        <span class="transaction-amount">${currencySymbols[currentCurrency]}${formatNumber(Math.abs(transaction.amount))}</span>
+        <span class="transaction-date">${formatDateTime(transaction.datetime)}</span>
+    </div>
+`;
+
     list.appendChild(item);
 
     // Add touch support
