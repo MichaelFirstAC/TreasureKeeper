@@ -55,20 +55,20 @@ function addTransaction(e) {
 e.preventDefault();
 
 if (text.value.trim() === '' || amount.value.trim() === '' || category.value.trim() === '') {
-      alert('Please add a description, category, and amount');
-      return;
+    alert('Please add a description, category, and amount');
+    return;
 }
 
 // Get the datetime value or use current time if not specified
 const transactionDate = datetime.value ? new Date(datetime.value) : new Date();
 
 const transaction = {
-      id: generateID(),
-      text: text.value,
-      category: category.value,
-      amount: type.value === 'income' ? +amount.value : -amount.value,
-      currency: currentCurrency,
-      datetime: transactionDate.toISOString() // Store date in ISO format
+    id: generateID(),
+    text: text.value,
+    category: category.value,
+    amount: type.value === 'income' ? +amount.value : -amount.value,
+    currency: currentCurrency,
+    datetime: transactionDate.toISOString() // Store date in ISO format
 };
 
 transactions.push(transaction);
@@ -98,30 +98,22 @@ return new Date(dateString).toLocaleString(undefined, options);
 
 // Add transaction to DOM
 function addTransactionDOM(transaction) {
-const sign = transaction.amount < 0 ? "-" : "+";
-const item = document.createElement("li");
+    const sign = transaction.amount < 0 ? "-" : "+";
+    const item = document.createElement("li");
 
-item.classList.add(transaction.amount < 0 ? "minus" : "plus");
+    item.classList.add(transaction.amount < 0 ? "minus" : "plus");
 
-item.innerHTML = `
-    <button class="delete-btn" onclick="removeTransaction(${transaction.id})"></button>
-    <div class="transaction-details">
-        <span class="transaction-text">${transaction.text}</span>
-        <span class="category-tag">${transaction.category}</span>
-        <span class="transaction-amount">${currencySymbols[currentCurrency]}${formatNumber(Math.abs(transaction.amount))}</span>
-        <span class="transaction-date">${formatDateTime(transaction.datetime)}</span>
-    </div>
-`;
+    item.innerHTML = `
+        <button class="delete-btn" onclick="removeTransaction(${transaction.id})"></button>
+        <div class="transaction-details">
+            <span class="transaction-text">${transaction.text}</span>
+            <span class="category-tag">${transaction.category}</span>
+            <span class="transaction-amount">${currencySymbols[transaction.currency]}${formatNumber(Math.abs(transaction.amount))}</span>
+            <span class="transaction-date">${formatDateTime(transaction.datetime)}</span>
+        </div>
+    `;
 
     list.appendChild(item);
-
-    // Add touch support
-    item.addEventListener('touchstart', function() {
-        this.classList.add('touched');
-    });
-    item.addEventListener('touchend', function() {
-        this.classList.remove('touched');
-    });
 }
 
 // Update balance, income and expense
@@ -174,6 +166,17 @@ async function updateCurrencyDisplay(selectedCurrency) {
     const rate = await getExchangeRate(currentCurrency, selectedCurrency);
     if (rate) {
         currentCurrency = selectedCurrency;
+        
+        // Convert transactions to the new currency
+        transactions = transactions.map(transaction => {
+            const convertedAmount = transaction.amount * rate; // Convert the amount
+            return {
+                ...transaction,
+                amount: convertedAmount, // Update the amount to the converted amount
+                currency: selectedCurrency // Update the currency
+            };
+        });
+
         updateValues();
         updateTransactionsList();
     }
