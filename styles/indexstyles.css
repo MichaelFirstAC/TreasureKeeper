@@ -48,6 +48,12 @@ h4 {
   color: #666;
 }
 
+h5 {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
 /* Balance Text */
 #balance {
     font-size: 36px;
