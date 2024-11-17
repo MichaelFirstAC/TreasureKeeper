@@ -24,15 +24,15 @@ const currencySymbols = {
 
 // Set default datetime value to current time when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  
-  datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-  init();
+const now = new Date();
+const year = now.getFullYear();
+const month = String(now.getMonth() + 1).padStart(2, '0');
+const day = String(now.getDate()).padStart(2, '0');
+const hours = String(now.getHours()).padStart(2, '0');
+const minutes = String(now.getMinutes()).padStart(2, '0');
+
+datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+init();
 });
 
 // Get transactions from localStorage
@@ -52,48 +52,48 @@ function formatNumber(number) {
 
 // Add transaction
 function addTransaction(e) {
-  e.preventDefault();
+e.preventDefault();
 
-  if (text.value.trim() === '' || amount.value.trim() === '' || category.value.trim() === '') {
+if (text.value.trim() === '' || amount.value.trim() === '' || category.value.trim() === '') {
       alert('Please add a description, category, and amount');
       return;
-  }
+}
 
-  // Get the datetime value or use current time if not specified
-  const transactionDate = datetime.value ? new Date(datetime.value) : new Date();
+// Get the datetime value or use current time if not specified
+const transactionDate = datetime.value ? new Date(datetime.value) : new Date();
 
-  const transaction = {
+const transaction = {
       id: generateID(),
       text: text.value,
       category: category.value,
       amount: type.value === 'income' ? +amount.value : -amount.value,
       currency: currentCurrency,
       datetime: transactionDate.toISOString() // Store date in ISO format
-  };
+};
 
-  transactions.push(transaction);
-  addTransactionDOM(transaction);
-  updateValues();
-  updateLocalStorage();
+transactions.push(transaction);
+addTransactionDOM(transaction);
+updateValues();
+updateLocalStorage();
 
-  // Reset form
-  text.value = '';
-  amount.value = '';
-  category.value = '';
-  type.value = 'income';
-  datetime.value = '';
+// Reset form
+text.value = '';
+amount.value = '';
+category.value = '';
+type.value = 'income';
+datetime.value = '';
 }
 
 // Format date function
 function formatDateTime(dateString) {
-  const options = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-  };
-  return new Date(dateString).toLocaleString(undefined, options);
+const options = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+};
+return new Date(dateString).toLocaleString(undefined, options);
 }
 
 // Add transaction to DOM
