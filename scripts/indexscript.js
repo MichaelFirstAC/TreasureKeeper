@@ -22,6 +22,59 @@ const currencySymbols = {
     'IDR': 'Rp',
 };
 
+// Define constant exchange rates
+const EXCHANGE_RATES = {
+    'USD': {
+        'IDR': 15898.30, // 1 USD = 15898.30 IDR
+        'AUD': 1.55, // 1 USD = 1.55 AUD
+        'EUR': 0.95, // 1 USD = 0.95 EUR
+        'GBP': 0.79, // 1 USD = 0.79 GBP
+        'JPY': 154.33, // 1 USD = 154.33 JPY
+        'USD': 1 // 1 USD = 1 USD
+    },
+    'AUD': {
+        'IDR': 10275.89, // 1 AUD = 10275.89 IDR
+        'EUR': 0.61, // 1 AUD = 0.61 EUR
+        'GBP': 0.51, // 1 AUD = 0.51 GBP
+        'JPY': 99.74, // 1 AUD = 99.74 JPY
+        'USD': 0.65, // 1 AUD = 0.65 USD
+        'AUD': 1 // 1 AUD = 1 AUD
+    },
+    'EUR': {
+        'IDR': 16819.00, // 1 EUR = 16819.00 IDR
+        'GBP': 0.84, // 1 EUR = 0.84 GBP
+        'JPY': 162.76, // 1 EUR = 162.76 JPY
+        'USD': 1.05, // 1 EUR = 1.05 USD
+        'AUD': 1.63, // 1 EUR = 1.63 AUD
+        'EUR': 1 // 1 EUR = 1 EUR
+    },
+    'GBP': {
+        'IDR': 20061.83, // 1 EUR = 20061.83 IDR
+        'JPY': 194.74,  // 1 GBP = 194.74 JPY
+        'USD': 1.26, // 1 EUR = 1.26 USD
+        'AUD': 1.95, // 1 EUR = 1.95 AUD
+        'EUR': 1.20, // 1 EUR = 1.20 GBP
+        'GBP': 1 // 1 `GBP = 1 GBP
+    },
+    'JPY': {
+        'IDR': 103.02, // 1 JPY = 103.02 IDR
+        'USD': 0.0065, // 1 JPY = 0.0065 USD
+        'AUD': 0.010, // 1 JPY = 0.010 AUD
+        'EUR': 0.0061, // 1 JPY = 0.0061 EUR
+        'GBP': 0.0051, // 1 JPY = 0.0051 GBP
+        'JPY': 1   // 1 JPY = 1 JPY
+    },
+    'IDR': {
+        'IDR': 1,   // 1 IDR = 1 IDR
+        'USD': 0.000063, // 1 IDR = 0.000063 USD
+        'AUD': 0.000097, // 1 IDR = 0.000097 AUD
+        'EUR': 0.000059, // 1 IDR = 0.000059 EUR
+        'GBP': 0.000050, // 1 IDR = 0.000050 GBP
+        'JPY': 0.0097 // 1 IDR = 0.0097 JPY
+    }
+};
+
+
 // Set default datetime value to current time when the page loads
 document.addEventListener('DOMContentLoaded', () => {
 const now = new Date();
@@ -163,13 +216,15 @@ async function updateCurrencyDisplay(selectedCurrency) {
     const loadingIndicator = document.querySelector('.currency-loading');
     if (loadingIndicator) loadingIndicator.classList.add('active');
 
-    const rate = await getExchangeRate(currentCurrency, selectedCurrency);
+    // Use the constant exchange rate instead of fetching from an API
+    const rate = EXCHANGE_RATES[currentCurrency][selectedCurrency];
+
     if (rate) {
         currentCurrency = selectedCurrency;
-        
+
         // Convert transactions to the new currency
         transactions = transactions.map(transaction => {
-            const convertedAmount = transaction.amount * rate; // Convert the amount
+            const convertedAmount = transaction.amount * rate; // Convert the amount using the constant rate
             return {
                 ...transaction,
                 amount: convertedAmount, // Update the amount to the converted amount
