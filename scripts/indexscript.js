@@ -15,21 +15,11 @@ const datetime = document.getElementById('datetime');
 const DEFAULT_CURRENCY = 'USD';
 const currencySymbols = {
     'USD': '$',
-    'CAD': 'C$',
-    'SGD': 'S$',
-    'NZD': 'NZ$',
     'AUD': 'A$',
     'EUR': '€',
     'GBP': '£',
     'JPY': '¥',
-    'KRW': '₩',
-    'CNY': '¥',
-    'INR': '₹',
-    'RUB': '₽',
-    'ZAR': 'R',
     'IDR': 'Rp',
-    'THB': '฿',
-    'MYR': 'RM',
 };
 
 // Set default datetime value to current time when the page loads
