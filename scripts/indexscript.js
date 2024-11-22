@@ -165,6 +165,8 @@ function addTransaction(e) {
     type.value = 'income';
     datetime.value = '';
     document.getElementById('edit-id').value = ''; // Reset edit ID
+
+    init(); // This will sort and display the transactions
 }
 
 // Format date function
@@ -291,6 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialize app
 function init() {
+    // Sort transactions by datetime in descending order (most recent first)
+    transactions.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+
     list.innerHTML = "";
     transactions.forEach(addTransactionDOM);
     updateValues();
