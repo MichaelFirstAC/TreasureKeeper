@@ -12,9 +12,8 @@ const currencySelect = document.getElementById('currency-select');
 const datetime = document.getElementById('datetime');
 
 // Currency configuration
-const DEFAULT_CURRENCY = '';
+const DEFAULT_CURRENCY = 'USD';
 const currencySymbols = {
-    '':'',
     'USD': '$',
     'AUD': 'A$',
     'EUR': '€',
@@ -94,13 +93,6 @@ const localStorageTransactions = JSON.parse(localStorage.getItem('transactions')
 let transactions = localStorage.getItem('transactions') !== null ? localStorageTransactions : [];
 let currentCurrency = localStorage.getItem('currentCurrency') || DEFAULT_CURRENCY;
 
-// If you want to check if currentCurrency is empty and set it to a default
-if (!currentCurrency) {
-    currencySelect.value = ''; // This will show "Select a currency"
-} else {
-    currencySelect.value = currentCurrency; // This will set it to the stored currency
-}
-
 // Generate random ID
 function generateID() {
     return Math.floor(Math.random() * 1000000000);
@@ -140,11 +132,10 @@ function addTransaction(e) {
     
     const transaction = {
         id: editId ? parseInt(editId) : generateID(),
-        text: text.value,
+        text: text.value, // Description is still included but not required
         category: category.value,
         amount: type.value === 'income' ? +amount.value : -amount.value,
-        currency: currentCurrency, // Keep the current currency
-        originalCurrency: currentCurrency, // Store original currency
+        currency: currentCurrency,
         datetime: transactionDate.toISOString()
     };
 
@@ -191,7 +182,7 @@ function addTransactionDOM(transaction) {
         <div class="transaction-details">
             <span class="transaction-text">${transaction.text}</span>
             <span class="category-tag">${transaction.category}</span>
-            <span class="transaction-amount">${currencySymbols[transaction.originalCurrency]}${formatNumber(Math.abs(transaction.amount))}</span>
+            <span class="transaction-amount">${currencySymbols[transaction.currency]}${formatNumber(Math.abs(transaction.amount))}</span>
             <span class="transaction-date">${formatDateTime(transaction.datetime)}</span>
         </div>
     `;
@@ -201,11 +192,7 @@ function addTransactionDOM(transaction) {
 
 // Update balance, income and expense
 function updateValues() {
-    const amounts = transactions.map(transaction => {
-        // Convert only for balance, income, and expense calculations
-        return convertCurrency(transaction.amount, transaction.originalCurrency, currentCurrency);
-    });
-
+    const amounts = transactions.map(transaction => transaction.amount);
     const total = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2);
     const income = amounts
         .filter(item => item > 0)
@@ -219,15 +206,6 @@ function updateValues() {
     balance.innerHTML = `${currencySymbols[currentCurrency]}${formatNumber(parseFloat(total))}`;
     money_plus.innerHTML = `+${currencySymbols[currentCurrency]}${formatNumber(parseFloat(income))}`;
     money_minus.innerHTML = `-${currencySymbols[currentCurrency]}${formatNumber(parseFloat(expense))}`;
-}
-
-// Function to convert currency based on exchange rates
-function convertCurrency(amount, fromCurrency, toCurrency) {
-    if (fromCurrency === toCurrency) {
-        return amount; // No conversion needed
-    }
-    const rate = EXCHANGE_RATES[fromCurrency][toCurrency];
-    return amount * rate; // Convert using exchange rate
 }
 
 // Remove transaction
@@ -266,14 +244,25 @@ async function updateCurrencyDisplay(selectedCurrency) {
     const loadingIndicator = document.querySelector('.currency-loading');
     if (loadingIndicator) loadingIndicator.classList.add('active');
 
-    // Update the current currency
-    currentCurrency = selectedCurrency;
+    // Use the constant exchange rate instead of fetching from an API
+    const rate = EXCHANGE_RATES[currentCurrency][selectedCurrency];
 
-    // Update balance and income/expense display
-    updateValues(); // This will recalculate and display the updated values based on the new currency
+    if (rate) {
+        currentCurrency = selectedCurrency;
 
-    // Refresh the transaction list to reflect the unchanged history
-    updateTransactionsList();
+        // Convert transactions to the new currency
+        transactions = transactions.map(transaction => {
+            const convertedAmount = transaction.amount * rate; // Convert the amount using the constant rate
+            return {
+                ...transaction,
+                amount: convertedAmount, // Update the amount to the converted amount
+                currency: selectedCurrency // Update the currency
+            };
+        });
+
+        updateValues();
+        updateTransactionsList();
+    }
 
     if (loadingIndicator) loadingIndicator.classList.remove('active');
 }

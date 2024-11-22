@@ -352,7 +352,6 @@ input[type="datetime-local"]:focus {
   padding: 10px 15px;
   margin: 0 10px; 
   font-size: 16px;
-  font-weight: bold;
   transition: background-color 0.3s ease;
   border-radius: 5px;
 }
