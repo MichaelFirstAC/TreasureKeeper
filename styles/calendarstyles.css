@@ -1,0 +1,228 @@
+/* Basic Reset and Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f1f8f1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Container Styles */
+.container {
+    margin: 30px auto;
+    width: 1000px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+}
+
+/* Typography */
+h1 {
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+h2 {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h3 {
+    border-bottom: 1px solid #a5d6a7;
+    padding-bottom: 10px;
+    margin: 40px 0 10px;
+}
+
+h4 {
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 16px;
+    color: #666;
+}
+
+h5 {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #4CAF50;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    gap: 100px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    margin: 0 10px; 
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+.navbar a:hover {
+    background-color: #45a049;
+}
+
+/* Active link style */
+.navbar a.active {
+    background-color: #45a049;
+    font-weight: bold;
+}
+
+/* Calendar Styles */
+.calendar {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #a0456f;
+    color: white;
+}
+
+.calendar-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.calendar-header .month-year {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.calendar-body {
+    padding: 20px;
+}
+
+.day-names {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.day-names div {
+    width: 14.28%;
+    text-align: center;
+}
+
+.days {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.days div {
+    width: 14.28%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for days */
+.days div:hover {
+    background-color: #f1f1f1;
+}
+
+/* Inactive and Active day styles, for current date */
+.days div.inactive {
+    background-color: #f9f9f9;
+    color: #ccc;
+    cursor: default;
+}
+
+.days div.active {
+    background-color: rgba(122, 122, 122, 0.3);
+    color: rgb(0, 0, 0);
+}
+
+/* Displaying a green or red color block for representing income or expenses */
+.days div.income::after,
+.days div.expense::after {
+    content: '';
+    position: absolute;
+    bottom: 10px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 40px;
+    border-radius: 5px;
+}
+
+.days div.income::after {
+    background-color: #45e14a;
+}
+
+.days div.expense::after {
+    background-color: #e92d2d;
+}
+
+/* Ensure the parent elements have the correct positioning */
+.days div.income,
+.days div.expense {
+    align-items: flex-start;
+    padding-top: 15px;
+    position: relative;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        gap: 0px;
+    }
+
+    .navbar a {
+        margin: 5px 0;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 400px) {
+    .container {
+        width: 90%;
+        margin: 20px auto;
+    }
+}

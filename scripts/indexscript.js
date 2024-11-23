@@ -55,7 +55,7 @@ const EXCHANGE_RATES = {
         'USD': 1.26, // 1 EUR = 1.26 USD
         'AUD': 1.95, // 1 EUR = 1.95 AUD
         'EUR': 1.20, // 1 EUR = 1.20 GBP
-        'GBP': 1 // 1 `GBP = 1 GBP
+        'GBP': 1 // 1 GBP = 1 GBP
     },
     'JPY': {
         'IDR': 103.02, // 1 JPY = 103.02 IDR
@@ -124,6 +124,10 @@ function editTransaction(id) {
     }
 }
 
+// Constants for red and green box classes NEW ADDITION TO THE INDEX JS
+const RED_BOX_CLASS = 'redbox';
+const GREEN_BOX_CLASS = 'greenbox';
+
 // Function to add or update a transaction
 function addTransaction(e) {
     e.preventDefault();
@@ -166,6 +170,8 @@ function addTransaction(e) {
     datetime.value = '';
     document.getElementById('edit-id').value = ''; // Reset edit ID
 
+    assignBoxClassesForDates(); // Update box classes for dates
+    
     init(); // This will sort and display the transactions
 }
 
@@ -305,5 +311,43 @@ function init() {
 form.addEventListener('submit', addTransaction);
 currencySelect.addEventListener('change', (e) => updateCurrencyDisplay(e.target.value));
 
+// Function to assign box classes for each unique date and store in local storage
+async function assignBoxClassesForDates() {
+    const dateAmounts = {};
+    const dateClasses = {};
+
+    // Calculate total amount for each date
+    transactions.forEach(transaction => {
+        const transactionDate = new Date(transaction.datetime).toDateString();
+        if (!dateAmounts[transactionDate]) {
+            dateAmounts[transactionDate] = 0;
+        }
+        dateAmounts[transactionDate] += transaction.amount;
+    });
+
+    // Determine box class for each date based on total amount
+    Object.keys(dateAmounts).forEach(date => {
+        const totalAmount = dateAmounts[date];
+        const boxClass = totalAmount >= 0 ? GREEN_BOX_CLASS : RED_BOX_CLASS;
+        dateClasses[date] = boxClass;
+    });
+
+    // Store date classes in local storage
+    localStorage.setItem('dateClasses', JSON.stringify(dateClasses));
+}
+
+// Example usage of assignBoxClassesForDates
+document.addEventListener('DOMContentLoaded', () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+    init();
+    assignBoxClassesForDates();
+});
 // Initialize the app
 document.addEventListener('DOMContentLoaded', init);
