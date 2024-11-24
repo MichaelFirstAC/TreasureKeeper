@@ -18,7 +18,7 @@ body {
 /* Container Styles */
 .container {
   margin: 30px auto;
-  width: 800px;
+  width: 90%;
   padding: 20px;
   background-color: #ffffff;
   border-radius: 10px;
@@ -29,9 +29,11 @@ body {
 h1 {
   letter-spacing: 1px;
   margin: 0;
+  overflow: auto;
 }
 
 h2 {
+  text-align: center;
   margin-top: 20px;
 }
 
@@ -56,7 +58,7 @@ h5 {
 
 /* Balance Text */
 #balance {
-    font-size: 36px;
+    font-size: 150%;
     font-weight: bold;
     margin: 15px 0;
     color: #2e7d32;
@@ -71,6 +73,7 @@ h5 {
     justify-content: space-between;
     margin: 20px 0;
     border-radius: 8px;
+    overflow: auto;
 }
 
 .inc-exp-container > div {
@@ -85,7 +88,7 @@ h5 {
 
 /* Money Display */
 .money {
-    font-size: 28px;
+    font-size: 100%;
     letter-spacing: 1px;
     margin: 10px 0;
     font-weight: bold;
@@ -93,12 +96,37 @@ h5 {
 
 .money-plus {
     color: #66bb6a;
-    font-size: 28px;
+    font-size: 120%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: auto;
 }
 
 .money-minus {
     color: #d32f2f;
-    font-size: 28px;
+    font-size: 120%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: auto;
+}
+
+/* Transaction Details Container */
+.transaction-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  overflow: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Date Display */
+.transaction-date {
+  font-size: 0.85em;
+  color: #666;
+  min-width: 150px;
+  text-align: right;
 }
 
 /* Transaction List */
@@ -122,68 +150,49 @@ h5 {
   justify-content: space-between;
 }
 
-/* Transaction Details Container */
-.transaction-details {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Date Display */
-.transaction-date {
-  font-size: 0.85em;
-  color: #666;
-  min-width: 150px;
-  text-align: right;
-}
-
 /* Transaction Colors */
 .list li.plus {
-  border-right: 5px solid #66bb6a;
+  border-right: 10px solid #66bb6a;
 }
 
 .list li.minus {
-  border-right: 5px solid #d32f2f;
+  border-right: 10px solid #d32f2f;
 }
 
 /* Delete Button */
 .delete-btn {
-    cursor: pointer;
-    background-color: #d32f2f;
-    border: 0;
-    color: #ffffff;
-    font-size: 24px;
-    line-height: 24px;
-    padding: 8px 12px;
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translate(-100%, -50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 4px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    cursor: pointer; /* Change cursor to a hand when hovering over the button */
+    background-color: #d32f2f; /* Set the background color to red */
+    border: 0; /* Remove the border */
+    color: #ffffff; /* Set the text color to white */
+    font-size: 24px; /* Set the font size to 24px */
+    line-height: 24px; /* Set the line height to 24px */
+    padding: 8px 12px; /* Add some padding */
+    position: absolute; /* Position the button absolutely */
+    top: 50%; /* Position the button in the center vertically */
+    left: 0; /* Position the button to the left */
+    transform: translate(-100%, -50%); /* Move the button to the left */
+    opacity: 0; /* Hide the button by default */
+    transition: opacity 0.3s ease; /* Add a transition effect */
+    border-radius: 4px; /* Add some border radius */
+    width: 27px; /* Set the width of the button */
+    height: 27px; /* Set the height of the button */
+    display: flex; /* Use flexbox for centering */
+    align-items: center; /* Center align items */
+    justify-content: center; /* Center justify content */
 }
 
 .delete-btn::before {
-    content: "×";
+    content: "×"; /* Add a cross symbol */
 }
 
 .delete-btn:hover {
-    background-color: #b71c1c;
+    background-color: #b71c1c; /* Darker red on hover */
 }
 
 /* Edit Button Styles */
 .edit-btn {
-  cursor: pointer;
+  cursor: pointer; /* Change cursor to pointer on hover */
   background-color: #4caf50; /* Green background */
   border: none; /* Remove border */
   color: white; /* White text */
@@ -191,11 +200,13 @@ h5 {
   text-align: center; /* Center text */
   padding: 6px 9px; /* Padding for spacing */
   border-radius: 4px; /* Rounded corners */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition effects */
+  transition: 
+  background-color 0.3s ease, 
+  transform 0.2s ease; /* Smooth transition effects */
   display: flex; /* Flexbox for centering */
   align-items: center; /* Center align items */
   justify-content: center; /* Center justify content */
-  margin-right: 10px;
+  margin-right: 10px; /* Space between buttons */
 }
 
 /* Hover effect for Edit button */
@@ -349,9 +360,8 @@ input[type="datetime-local"]:focus {
 .navbar a {
   color: white;
   text-decoration: none;
-  padding: 10px 15px;
   margin: 0 10px; 
-  font-size: 16px;
+  font-size: 100%;
   font-weight: bold;
   transition: background-color 0.3s ease;
   border-radius: 5px;
@@ -402,9 +412,22 @@ input[type="datetime-local"]:focus {
 
 /* Responsive Design */
 @media (max-width: 400px) {
+  .navbar {
+      flex-direction: column;
+  }
+
+  .navbar a {
+      margin: 5px 0;
+      width: 100%;
+      text-align: center;
+  }
+
   .container {
-      width: 90%;
-      margin: 20px auto;
+      padding: 10px;
+  }
+
+  #balance, #money-plus, #money-minus {
+      font-size: 1.5em;
   }
 
   .inc-exp-container {
