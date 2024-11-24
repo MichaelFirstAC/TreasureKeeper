@@ -4,24 +4,28 @@
 
 ### Human-Computer Interaction Final Project - Group Kapal Laut
 
-Treasure Keeper is a web-based expense-tracking application designed to help users manage their finances efficiently. The application allows users to record their income and expenses, visualize their financial data through statistics, and manage their transactions using a calendar interface. With a clean and user-friendly interface, Treasure Keeper aims to provide a seamless experience for users looking to take control of their financial health.
+Live link: https://michaelfirstac.github.io/TreasureKeeper/
+
+Demo video link: ...
+
+Treasure Keeper is a slick web app that helps users track their pockets, make cash moves, and level up their financial game. Easily log your income and expenses, get a visual of your cash flow, and stay on top of your transactions with a slick calendar view. Plus, the clean user interface makes it a joy to use. Whether you're a boss tryna stay on top of your cash or just trying to get your money right, Treasure Keeper's got your back.
 
 ## Features
 
-- User-Friendly Interface: A responsive design that adapts to various screen sizes, ensuring accessibility on both desktop and mobile devices.
-- Expense Tracking: Users can easily log their income and expenses, categorize transactions, and view their financial history.
-- Statistics Dashboard: Visual representations of income and expenses to help users understand their spending habits and make informed financial decisions.
-- Calendar Integration: A calendar feature that allows users to visualize their transactions over time and manage their financial activities effectively.
-- Currency Support: The application supports multiple currencies, enabling users to track expenses in their preferred currency.
-- Local Storage: Transactions and user settings are stored locally, ensuring data persistence even when the application is closed.
+- Treasure Keeper boasts a responsive interface that rocks on desktops and mobile devices alike.
+- Expense tracking is a breeze, with users able to log income and expenses, categorize transactions, and view their financial past.
+- The app's dashboard serves up slick visual representations of income and expenses, helping users make smart financial choices.
+- A calendar feature, backed by tight integration, allows users to visualize their transactions and manage their money like a boss.
+- Treasure Keeper's got your back with multi-currency support, so you can track your dough in your preferred currency.
+- And finally, local storage ensures that your data sticks
 
 ## Dependencies
 
-- HTML5: For the structure and layout of the web pages.
-- CSS3: For styling and responsive design using Flexbox.
-- Bootstrap: A popular front-end framework for building responsive and mobile-first UI components.
-- JavaScript: For dynamic functionality, including form handling, local storage management, and data visualization.
-- Google Fonts: For typography enhancements.
+* HTML5 for the foundation and layout of the web pages.
+* CSS3 for styling and responsiveness, with Flexbox adding some serious layout flex.
+* Bootstrap was used in the app for quick, beautiful, and mobile-friendly UI components.
+* JavaScript brings it to life, handling dynamic features like form handling, local storage, and sweet data visualizations.
+* Fonts from Google Fonts give it the perfect finishing touch.
 
 ## Usage
 
@@ -32,7 +36,7 @@ Treasure Keeper is a web-based expense-tracking application designed to help use
 
 ### Contributors
 
-- Michael Arianno Chandrarieta
-- Barri Nur Pratama
-- Harris Ekaputra Suryadi
-  
+- Michael Arianno Chandrarieta - 2802499711
+- Harris Ekaputra Suryadi - 2802400502
+- Barri Nur Pratama - 2802501142
+
