@@ -436,6 +436,8 @@ h5 {
 #transaction-list-container hr {
     margin: 0 auto; /* Center the horizontal rule */
     width: 97%; /* Align width with the list */
+    border: 0;
+    border-top: 1px solid #a5d6a7; /* Match the color with the one in index styles */
 }
 
 /* Updated Select Styles */
