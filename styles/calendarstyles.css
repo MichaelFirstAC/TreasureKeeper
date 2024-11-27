@@ -268,6 +268,127 @@ h5 {
     position: relative;
 }
 
+/* New style for clicked class */
+.days div.clicked {
+    background-color: #f1f1f1; /* Same as hover effect */
+}
+
+/* Transaction List */
+.list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  width: 97%; /* Align width with calendar */
+  margin: 0 auto; /* Center the list */
+}
+
+.list li {
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  color: #333;
+  display: flex;
+  position: relative;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 4px;
+  justify-content: space-between;
+}
+
+/* Transaction Colors */
+.list li.plus {
+  border-right: 10px solid #66bb6a;
+}
+
+.list li.minus {
+  border-right: 10px solid #d32f2f;
+}
+
+/* Transaction Details Container */
+.transaction-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  overflow: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Date Display */
+.transaction-date {
+  font-size: 0.85em;
+  color: #666;
+  min-width: 150px;
+  text-align: right;
+}
+
+/* Category Tag */
+.category-tag {
+  background-color: #e0f2f1;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  margin: 0 10px;
+}
+
+/* Transaction Type */
+.transaction-type {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.transaction-type.income {
+  background-color: rgba(76, 175, 80, 0.7); /* Green background with transparency */
+}
+
+.transaction-type.expense {
+  background-color: rgba(211, 47, 47, 0.7); /* Red background with transparency */
+}
+
+/* Surplus List Styles */
+.surplus-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 5px 0;
+    color: white;
+    font-weight: bold;
+    font-size: 1.5em; /* Increase font size */
+}
+
+.surplus-item .transaction-details {
+    display: flex;
+    justify-content: space-between;
+    width: 97%;
+}
+
+.surplus-item .transaction-text {
+    margin-right: 10px; /* Reduce margin */
+}
+
+.surplus-item .transaction-amount {
+    font-size: 1.2em; /* Increase font size */
+}
+
+.surplus-item.positive {
+    background-color: rgba(76, 175, 80, 0.7); /* Green background */
+}
+
+.surplus-item.negative {
+    background-color: rgba(211, 47, 47, 0.7); /* Red background */
+}
+
+.surplus-item.zero {
+    background-color: rgba(122, 122, 122, 0.3) /* Grey background */
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
     .navbar {
@@ -289,4 +410,84 @@ h5 {
         width: 90%;
         margin: 20px auto;
     }
+
+    .list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .list li .delete-btn {
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        opacity: 1;
+    }
+}
+
+#transaction-list-container h4 {
+    font-size: 1.5em; /* Make the heading bigger */
+    text-align: left; /* Align the heading with the list */
+    margin: 20px 0 10px 0; /* Add some margin for spacing */
+    width: 97%; /* Align width with the list */
+    margin: 0 auto; /* Center the heading */
+}
+
+/* Updated Select Styles */
+.currency-select {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 18px;
+    border: 1px solid #a5d6a7;
+    border-radius: 6px;
+    height: 45px;
+    cursor: pointer;
+    background-color: #fff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234caf50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    padding-right: 40px;
+}
+
+/* Hover effect */
+.currency-select:hover {
+    border-color: #4caf50;
+    box-shadow: 0 1px 4px rgba(76, 175, 80, 0.2);
+}
+
+/* Focus effect */
+.currency-select:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+/* Style for dropdown options */
+.currency-select option {
+    padding: 12px;
+    font-size: 16px;
+}
+
+/* Currency Control */
+.currency-control {
+    padding-top: 10px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 97%;
+}
+
+.currency-control label {
+    font-size: 17px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.currency-select {
+    margin-top: 5px;
 }

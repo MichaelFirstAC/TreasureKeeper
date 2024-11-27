@@ -46,6 +46,28 @@
                 </div>
             </div>
         </div>
+        <br>
+        <!-- Transaction list element -->
+        <div id="transaction-list-container">
+            <h4>Income</h4>
+            <ul id="income-list" class="list"></ul><br>
+            <h4>Expenses</h4>
+            <ul id="expense-list" class="list"></ul><br>
+            <h4>Surplus of the Day</h4>
+            <div class="currency-control">
+                <label for="currency-select">Display Currency:</label>
+                <select id="currency-select" class="currency-select">
+                    <option value="" disabled selected>Select a Currency</option>
+                    <option value="USD">US Dollar ($)</option>
+                    <option value="AUD">Australian Dollar (A$)</option>
+                    <option value="EUR">Euro (€)</option>
+                    <option value="GBP">British Pound (£)</option>
+                    <option value="JPY">Japanese Yen (¥)</option>
+                    <option value="IDR">Indonesian Rupiah (Rp)</option>
+                </select>
+            </div>
+            <ul id="surplus-list" class="list"></ul> 
+        </div>
     </div>
     
     <script src="scripts/calendarscript.js"></script>
