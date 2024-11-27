@@ -247,7 +247,7 @@ function removeTransaction(id) {
         // Filter out the transaction with the given ID
         transactions = transactions.filter(transaction => transaction.id !== id);
         updateLocalStorage(); // Update local storage after removal
-        init(); // Re-initialize the transaction list to reflect changes
+        window.location.reload(); // Refresh the page after deletion
     }
 }
 
@@ -328,7 +328,12 @@ async function assignBoxClassesForDates() {
     // Determine box class for each date based on total amount
     Object.keys(dateAmounts).forEach(date => {
         const totalAmount = dateAmounts[date];
-        const boxClass = totalAmount >= 0 ? GREEN_BOX_CLASS : RED_BOX_CLASS;
+        let boxClass = '';
+        if (totalAmount > 0) {
+            boxClass = GREEN_BOX_CLASS;
+        } else if (totalAmount < 0) {
+            boxClass = RED_BOX_CLASS;
+        }
         dateClasses[date] = boxClass;
     });
 

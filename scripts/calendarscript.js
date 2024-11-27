@@ -8,6 +8,82 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the current date
     let currentDate = new Date();
 
+    // Currency configuration
+    const currencySymbols = {
+        '': '',
+        'USD': '$',
+        'AUD': 'A$',
+        'EUR': '€',
+        'GBP': '£',
+        'JPY': '¥',
+        'IDR': 'Rp',
+    };
+
+    // Format number with commas
+    function formatNumber(number) {
+        return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Function to filter transactions by date
+    function filterTransactionsByDate(date) {
+        const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        const filteredTransactions = transactions.filter(transaction => {
+            const transactionDate = new Date(transaction.datetime).toDateString();
+            return transactionDate === date.toDateString();
+        });
+
+        const incomeList = document.getElementById('income-list');
+        const expenseList = document.getElementById('expense-list');
+        const surplusList = document.getElementById('surplus-list');
+
+        if (!incomeList || !expenseList || !surplusList) {
+            console.error('Transaction list elements not found');
+            return;
+        }
+
+        incomeList.innerHTML = '';
+        expenseList.innerHTML = '';
+        surplusList.innerHTML = '';
+
+        let totalIncome = 0;
+        let totalExpense = 0;
+
+        filteredTransactions.forEach(transaction => {
+            const item = document.createElement('li');
+            item.classList.add(transaction.amount < 0 ? 'minus' : 'plus');
+            const transactionType = transaction.amount < 0 ? 'EXPENSE' : 'INCOME';
+            const transactionTypeClass = transaction.amount < 0 ? 'expense' : 'income';
+            item.innerHTML = `
+                <div class="transaction-details">
+                    <span class="transaction-type ${transactionTypeClass}">${transactionType}</span>
+                    <span class="transaction-text">${transaction.text}</span>
+                    <span class="category-tag">${transaction.category}</span>
+                    <span class="transaction-amount">${currencySymbols[transaction.originalCurrency]}${formatNumber(Math.abs(transaction.amount))}</span>
+                    <span class="transaction-date">${new Date(transaction.datetime).toLocaleString()}</span>
+                </div>
+            `;
+
+            if (transaction.amount < 0) {
+                expenseList.appendChild(item);
+                totalExpense += Math.abs(transaction.amount);
+            } else {
+                incomeList.appendChild(item);
+                totalIncome += transaction.amount;
+            }
+        });
+
+        const surplusItem = document.createElement('li');
+        surplusItem.innerHTML = `
+            <div class="transaction-details">
+                <span class="transaction-text">Surplus</span>
+                <span class="transaction-amount">${currencySymbols['USD']}${formatNumber(totalIncome - totalExpense)}</span>
+            </div>
+        `;
+        surplusList.appendChild(surplusItem);
+    }
+
+    let lastClickedDay = null;
+
     // Function to render the calendar
     function renderCalendar() {
         daysContainer.innerHTML = '';
@@ -50,6 +126,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 day.classList.add('active');
             }
 
+            // Add click event to show transactions for the selected date
+            day.addEventListener('click', () => {
+                const selectedDate = new Date(year, month, i);
+                filterTransactionsByDate(selectedDate);
+
+                // Remove the 'clicked' class from the last clicked day
+                if (lastClickedDay && !lastClickedDay.classList.contains('active')) {
+                    lastClickedDay.classList.remove('clicked');
+                }
+
+                // Add the 'clicked' class to the currently clicked day if it's not the current date
+                if (!day.classList.contains('active')) {
+                    day.classList.add('clicked');
+                    lastClickedDay = day;
+                } else {
+                    lastClickedDay = null;
+                }
+            });
+
             daysContainer.appendChild(day);
         }
 
@@ -64,6 +159,9 @@ document.addEventListener('DOMContentLoaded', function() {
             daysContainer.appendChild(day);
         }
     }
+
+    // Show transactions for the current date on initial load
+    filterTransactionsByDate(new Date());
 
     // Event listener for previous month button
     prevMonthButton.addEventListener('click', () => {

@@ -268,6 +268,89 @@ h5 {
     position: relative;
 }
 
+/* New style for clicked class */
+.days div.clicked {
+    background-color: #f1f1f1; /* Same as hover effect */
+}
+
+/* Transaction List */
+.list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  width: 97%; /* Align width with calendar */
+  margin: 0 auto; /* Center the list */
+}
+
+.list li {
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  color: #333;
+  display: flex;
+  position: relative;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 4px;
+  justify-content: space-between;
+}
+
+/* Transaction Colors */
+.list li.plus {
+  border-right: 10px solid #66bb6a;
+}
+
+.list li.minus {
+  border-right: 10px solid #d32f2f;
+}
+
+/* Transaction Details Container */
+.transaction-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  overflow: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Date Display */
+.transaction-date {
+  font-size: 0.85em;
+  color: #666;
+  min-width: 150px;
+  text-align: right;
+}
+
+/* Category Tag */
+.category-tag {
+  background-color: #e0f2f1;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  margin: 0 10px;
+}
+
+/* Transaction Type */
+.transaction-type {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.transaction-type.income {
+  background-color: rgba(76, 175, 80, 0.7); /* Green background with transparency */
+}
+
+.transaction-type.expense {
+  background-color: rgba(211, 47, 47, 0.7); /* Red background with transparency */
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
     .navbar {
@@ -289,4 +372,25 @@ h5 {
         width: 90%;
         margin: 20px auto;
     }
+
+    .list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .list li .delete-btn {
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        opacity: 1;
+    }
+}
+
+#transaction-list-container h4 {
+    font-size: 1.5em; /* Make the heading bigger */
+    text-align: left; /* Align the heading with the list */
+    margin: 20px 0 10px 0; /* Add some margin for spacing */
+    width: 97%; /* Align width with the list */
+    margin: 0 auto; /* Center the heading */
 }
