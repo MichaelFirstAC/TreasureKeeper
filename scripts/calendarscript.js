@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const monthYearDisplay = document.querySelector('.month-year');
     const prevMonthButton = document.querySelector('.prev-month');
     const nextMonthButton = document.querySelector('.next-month');
+    const currencySelect = document.getElementById('currency-select');
+    let currentCurrency = localStorage.getItem('currentCurrency') || 'USD';
+
+    // Set the initial value of the currency select
+    currencySelect.value = currentCurrency;
 
     // Initialize the current date
     let currentDate = new Date();
@@ -19,9 +24,70 @@ document.addEventListener('DOMContentLoaded', function() {
         'IDR': 'Rp',
     };
 
+    // Define constant exchange rates
+    const EXCHANGE_RATES = {
+        'USD': {
+            'IDR': 15898.30,
+            'AUD': 1.55,
+            'EUR': 0.95,
+            'GBP': 0.79,
+            'JPY': 154.33,
+            'USD': 1
+        },
+        'AUD': {
+            'IDR': 10275.89,
+            'EUR': 0.61,
+            'GBP': 0.51,
+            'JPY': 99.74,
+            'USD': 0.65,
+            'AUD': 1
+        },
+        'EUR': {
+            'IDR': 16819.00,
+            'GBP': 0.84,
+            'JPY': 162.76,
+            'USD': 1.05,
+            'AUD': 1.63,
+            'EUR': 1
+        },
+        'GBP': {
+            'IDR': 20061.83,
+            'JPY': 194.74,
+            'USD': 1.26,
+            'AUD': 1.95,
+            'EUR': 1.20,
+            'GBP': 1
+        },
+        'JPY': {
+            'IDR': 103.02,
+            'USD': 0.0065,
+            'AUD': 0.010,
+            'EUR': 0.0061,
+            'GBP': 0.0051,
+            'JPY': 1
+        },
+        'IDR': {
+            'IDR': 1,
+            'USD': 0.000063,
+            'AUD': 0.000097,
+            'EUR': 0.000059,
+            'GBP': 0.000050,
+            'JPY': 0.0097
+        }
+    };
+
     // Format number with commas
     function formatNumber(number) {
         return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Function to convert currency based on exchange rates
+    function convertCurrency(amount, fromCurrency, toCurrency) {
+        if (fromCurrency === toCurrency) {
+            return amount; // No conversion needed
+        }
+        const rate = EXCHANGE_RATES[fromCurrency][toCurrency];
+        return amount * rate; // Convert using exchange rate
     }
 
     // Function to filter transactions by date
@@ -65,21 +131,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (transaction.amount < 0) {
                 expenseList.appendChild(item);
-                totalExpense += Math.abs(transaction.amount);
+                totalExpense += Math.abs(convertCurrency(transaction.amount, transaction.originalCurrency, currentCurrency));
             } else {
                 incomeList.appendChild(item);
-                totalIncome += transaction.amount;
+                totalIncome += convertCurrency(transaction.amount, transaction.originalCurrency, currentCurrency);
             }
         });
 
         const surplusItem = document.createElement('li');
+        surplusItem.classList.add('surplus-item');
+        const surplusValue = totalIncome - totalExpense;
+        if (surplusValue > 0) {
+            surplusItem.classList.add('positive');
+        } else if (surplusValue < 0) {
+            surplusItem.classList.add('negative');
+        } else {
+            surplusItem.classList.add('zero');
+        }
         surplusItem.innerHTML = `
             <div class="transaction-details">
                 <span class="transaction-text">Surplus</span>
-                <span class="transaction-amount">${currencySymbols['USD']}${formatNumber(totalIncome - totalExpense)}</span>
+                <span class="transaction-amount">${currencySymbols[currentCurrency]}${formatNumber(surplusValue)}</span>
             </div>
         `;
         surplusList.appendChild(surplusItem);
+    }
+
+    // Function to update the currency display
+    function updateCurrencyDisplay(selectedCurrency) {
+        currentCurrency = selectedCurrency;
+        localStorage.setItem('currentCurrency', currentCurrency);
+        if (lastClickedDay) {
+            const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(lastClickedDay.textContent));
+            filterTransactionsByDate(selectedDate);
+        } else {
+            filterTransactionsByDate(new Date());
+        }
     }
 
     let lastClickedDay = null;
@@ -173,6 +260,11 @@ document.addEventListener('DOMContentLoaded', function() {
     nextMonthButton.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() + 1);
         renderCalendar();
+    });
+
+    // Event listener for currency select change
+    currencySelect.addEventListener('change', (e) => {
+        updateCurrencyDisplay(e.target.value);
     });
 
     // Initial render of the calendar
