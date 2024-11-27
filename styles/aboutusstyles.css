@@ -180,6 +180,7 @@ section a {
     border-radius: 5px; /* Remove radius */
     transition: background-color 0.3s; /* Add a transition effect */
     font-weight: bold; /* Add some weight to the text */
+    font-size: 80%; /* Add some size to the text */
 }
 
 section a :hover {
