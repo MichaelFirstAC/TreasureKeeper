@@ -433,6 +433,11 @@ h5 {
     margin: 0 auto; /* Center the heading */
 }
 
+#transaction-list-container hr {
+    margin: 0 auto; /* Center the horizontal rule */
+    width: 97%; /* Align width with the list */
+}
+
 /* Updated Select Styles */
 .currency-select {
     width: 100%;
