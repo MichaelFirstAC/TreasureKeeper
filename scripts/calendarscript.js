@@ -155,6 +155,18 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
         surplusList.appendChild(surplusItem);
+
+        // Update the box class based on the surplus value
+        const dateKey = date.toDateString();
+        const dateClasses = JSON.parse(localStorage.getItem('dateClasses')) || {};
+        if (surplusValue > 0) {
+            dateClasses[dateKey] = 'greenbox';
+        } else if (surplusValue < 0) {
+            dateClasses[dateKey] = 'redbox';
+        } else {
+            delete dateClasses[dateKey];
+        }
+        localStorage.setItem('dateClasses', JSON.stringify(dateClasses));
     }
 
     // Function to update the currency display
