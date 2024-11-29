@@ -159,24 +159,19 @@ h5 {
   border-right: 10px solid #d32f2f;
 }
 
-/* Filter Container Styles */
 .filter-container {
   display: flex;
   align-items: center;
-  margin-bottom: 20px; /* Space below the filter */
 }
 
-/* Date Input Styles */
-#filter-date {
+.filter-container input {
   padding: 10px;
   border: 1px solid #a5d6a7;
   border-radius: 4px;
   margin-right: 10px; /* Space between input and button */
-  font-size: 16px;
 }
 
-/* Filter Button Styles */
-#filter-btn {
+.filter-container button {
   cursor: pointer; /* Change cursor to pointer on hover */
   background-color: #4caf50; /* Green background color */
   color: white; /* White text color */
@@ -189,15 +184,9 @@ h5 {
 }
 
 /* Hover effect for the filter button */
-#filter-btn:hover {
+.filter-container button:hover {
   background-color: #45a049; /* Darker green on hover */
   transform: scale(1.02); /* Slightly increase size on hover */
-}
-
-/* Focus effect for accessibility */
-#filter-btn:focus {
-  outline: none; /* Remove default outline */
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5); /* Add a subtle shadow on focus */
 }
 
 /* Delete Button */
