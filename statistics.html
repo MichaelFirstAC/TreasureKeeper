@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistics</title>
     <link rel="icon" type="image/png" href="image/icon.png">
     <link rel="stylesheet" href="styles/statisticsstyles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap " rel="stylesheet">
-  </head>
-  <body>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
     <div class="container">
-
-      <div class="navbar">
-        <div class="dropdown">
-          <button class="dropbtn">三</button>
-          <div class="dropdown-content">
-            <a href="index.html">Home</a>
-            <a href="statistics.html">Statistics</a>
-            <a href="calendar.html">Calendar</a>
-            <a href="aboutus.html">About Us</a>
-          </div>
+        <div class="navbar">
+            <div class="dropdown">
+                <button class="dropbtn">三</button>
+                <div class="dropdown-content">
+                    <a href="index.html">Home</a>
+                    <a href="statistics.html">Statistics</a>
+                    <a href="calendar.html">Calendar</a>
+                    <a href="aboutus.html">About Us</a>
+                </div>
+            </div>
+            <h2>Treasure Keeper</h2>
         </div>
-        <h2>Treasure Keeper</h2>
-      </div>
-      
-    </div>     
+        
+        <h1>Statistics</h1>
+        <div id="statistics-container">
+            <!-- Income and Expense statistics will be injected here -->
+        </div>
+        
+        <h1>Income Pie Chart</h1>
+        <canvas id="income-pie-chart" width="50" height="50"></canvas>
+
+        <h1>Expense Pie Chart</h1>
+        <canvas id="expense-pie-chart" width="50" height="50"></canvas>
+    </div>
     <script src="scripts/statisticsscript.js"></script>
-  </body>
+</body>
 </html>

@@ -131,3 +131,35 @@ h5 {
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+
+
+.legend-color{
+    width:20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.legend-item{
+    display: flex;
+    margin-top: 20px;
+}
+
+.animate-pie-chart{
+    animation: animate-pie-chart 1s ease-in-out;
+}
+.statistic-item {
+    margin: 5px 0;
+}
+
+@keyframes animate-pie-chart{
+    0%{
+        transform: scale(0);
+        opacity: 0;
+    }
+    100%{
+        transform: scale(1);
+        opacity:1;
+    }
+}
