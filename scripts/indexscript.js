@@ -142,10 +142,11 @@ function addTransaction(e) {
 
     const transactionDate = datetime.value ? new Date(datetime.value) : new Date();
     
+    // Check if the transaction is already in the database
     const transaction = {
         id: editId ? parseInt(editId) : generateID(),
-        text: text.value,
-        category: category.value,
+        text: text.value, 
+        category: category.value, 
         amount: type.value === 'income' ? +amount.value : -amount.value,
         currency: currentCurrency, // Keep the current currency
         originalCurrency: currentCurrency, // Store original currency
