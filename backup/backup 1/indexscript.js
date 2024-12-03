@@ -12,9 +12,8 @@ const currencySelect = document.getElementById('currency-select');
 const datetime = document.getElementById('datetime');
 
 // Currency configuration
-const DEFAULT_CURRENCY = '';
+const DEFAULT_CURRENCY = 'USD';
 const currencySymbols = {
-    '':'',
     'USD': '$',
     'AUD': 'A$',
     'EUR': '€',
@@ -55,7 +54,7 @@ const EXCHANGE_RATES = {
         'USD': 1.26, // 1 EUR = 1.26 USD
         'AUD': 1.95, // 1 EUR = 1.95 AUD
         'EUR': 1.20, // 1 EUR = 1.20 GBP
-        'GBP': 1 // 1 GBP = 1 GBP
+        'GBP': 1 // 1 `GBP = 1 GBP
     },
     'JPY': {
         'IDR': 103.02, // 1 JPY = 103.02 IDR
@@ -94,13 +93,6 @@ const localStorageTransactions = JSON.parse(localStorage.getItem('transactions')
 let transactions = localStorage.getItem('transactions') !== null ? localStorageTransactions : [];
 let currentCurrency = localStorage.getItem('currentCurrency') || DEFAULT_CURRENCY;
 
-// If you want to check if currentCurrency is empty and set it to a default
-if (!currentCurrency) {
-    currencySelect.value = ''; // This will show "Select a currency"
-} else {
-    currencySelect.value = currentCurrency; // This will set it to the stored currency
-}
-
 // Generate random ID
 function generateID() {
     return Math.floor(Math.random() * 1000000000);
@@ -124,10 +116,6 @@ function editTransaction(id) {
     }
 }
 
-// Constants for red and green box classes NEW ADDITION TO THE INDEX JS
-const RED_BOX_CLASS = 'redbox';
-const GREEN_BOX_CLASS = 'greenbox';
-
 // Function to add or update a transaction
 function addTransaction(e) {
     e.preventDefault();
@@ -144,11 +132,10 @@ function addTransaction(e) {
     
     const transaction = {
         id: editId ? parseInt(editId) : generateID(),
-        text: text.value,
+        text: text.value, // Description is still included but not required
         category: category.value,
         amount: type.value === 'income' ? +amount.value : -amount.value,
-        currency: currentCurrency, // Keep the current currency
-        originalCurrency: currentCurrency, // Store original currency
+        currency: currentCurrency,
         datetime: transactionDate.toISOString()
     };
 
@@ -169,10 +156,6 @@ function addTransaction(e) {
     type.value = 'income';
     datetime.value = '';
     document.getElementById('edit-id').value = ''; // Reset edit ID
-
-    assignBoxClassesForDates(); // Update box classes for dates
-    
-    init(); // This will sort and display the transactions
 }
 
 // Format date function
@@ -199,7 +182,7 @@ function addTransactionDOM(transaction) {
         <div class="transaction-details">
             <span class="transaction-text">${transaction.text}</span>
             <span class="category-tag">${transaction.category}</span>
-            <span class="transaction-amount">${currencySymbols[transaction.originalCurrency]}${formatNumber(Math.abs(transaction.amount))}</span>
+            <span class="transaction-amount">${currencySymbols[transaction.currency]}${formatNumber(Math.abs(transaction.amount))}</span>
             <span class="transaction-date">${formatDateTime(transaction.datetime)}</span>
         </div>
     `;
@@ -209,11 +192,7 @@ function addTransactionDOM(transaction) {
 
 // Update balance, income and expense
 function updateValues() {
-    const amounts = transactions.map(transaction => {
-        // Convert only for balance, income, and expense calculations
-        return convertCurrency(transaction.amount, transaction.originalCurrency, currentCurrency);
-    });
-
+    const amounts = transactions.map(transaction => transaction.amount);
     const total = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2);
     const income = amounts
         .filter(item => item > 0)
@@ -229,15 +208,6 @@ function updateValues() {
     money_minus.innerHTML = `-${currencySymbols[currentCurrency]}${formatNumber(parseFloat(expense))}`;
 }
 
-// Function to convert currency based on exchange rates
-function convertCurrency(amount, fromCurrency, toCurrency) {
-    if (fromCurrency === toCurrency) {
-        return amount; // No conversion needed
-    }
-    const rate = EXCHANGE_RATES[fromCurrency][toCurrency];
-    return amount * rate; // Convert using exchange rate
-}
-
 // Remove transaction
 function removeTransaction(id) {
     // Ask for confirmation before deleting
@@ -247,7 +217,7 @@ function removeTransaction(id) {
         // Filter out the transaction with the given ID
         transactions = transactions.filter(transaction => transaction.id !== id);
         updateLocalStorage(); // Update local storage after removal
-        window.location.reload(); // Refresh the page after deletion
+        init(); // Re-initialize the transaction list to reflect changes
     }
 }
 
@@ -274,14 +244,25 @@ async function updateCurrencyDisplay(selectedCurrency) {
     const loadingIndicator = document.querySelector('.currency-loading');
     if (loadingIndicator) loadingIndicator.classList.add('active');
 
-    // Update the current currency
-    currentCurrency = selectedCurrency;
+    // Use the constant exchange rate instead of fetching from an API
+    const rate = EXCHANGE_RATES[currentCurrency][selectedCurrency];
 
-    // Update balance and income/expense display
-    updateValues(); // This will recalculate and display the updated values based on the new currency
+    if (rate) {
+        currentCurrency = selectedCurrency;
 
-    // Refresh the transaction list to reflect the unchanged history
-    updateTransactionsList();
+        // Convert transactions to the new currency
+        transactions = transactions.map(transaction => {
+            const convertedAmount = transaction.amount * rate; // Convert the amount using the constant rate
+            return {
+                ...transaction,
+                amount: convertedAmount, // Update the amount to the converted amount
+                currency: selectedCurrency // Update the currency
+            };
+        });
+
+        updateValues();
+        updateTransactionsList();
+    }
 
     if (loadingIndicator) loadingIndicator.classList.remove('active');
 }
@@ -299,9 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialize app
 function init() {
-    // Sort transactions by datetime in descending order (most recent first)
-    transactions.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
-
     list.innerHTML = "";
     transactions.forEach(addTransactionDOM);
     updateValues();
@@ -311,48 +289,5 @@ function init() {
 form.addEventListener('submit', addTransaction);
 currencySelect.addEventListener('change', (e) => updateCurrencyDisplay(e.target.value));
 
-// Function to assign box classes for each unique date and store in local storage
-async function assignBoxClassesForDates() {
-    const dateAmounts = {};
-    const dateClasses = {};
-
-    // Calculate total amount for each date
-    transactions.forEach(transaction => {
-        const transactionDate = new Date(transaction.datetime).toDateString();
-        if (!dateAmounts[transactionDate]) {
-            dateAmounts[transactionDate] = 0;
-        }
-        dateAmounts[transactionDate] += transaction.amount;
-    });
-
-    // Determine box class for each date based on total amount
-    Object.keys(dateAmounts).forEach(date => {
-        const totalAmount = dateAmounts[date];
-        let boxClass = '';
-        if (totalAmount > 0) {
-            boxClass = GREEN_BOX_CLASS;
-        } else if (totalAmount < 0) {
-            boxClass = RED_BOX_CLASS;
-        }
-        dateClasses[date] = boxClass;
-    });
-
-    // Store date classes in local storage
-    localStorage.setItem('dateClasses', JSON.stringify(dateClasses));
-}
-
-// Example usage of assignBoxClassesForDates
-document.addEventListener('DOMContentLoaded', () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-
-    datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-    init();
-    assignBoxClassesForDates();
-});
 // Initialize the app
 document.addEventListener('DOMContentLoaded', init);

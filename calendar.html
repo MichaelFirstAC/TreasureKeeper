@@ -10,14 +10,65 @@
 </head>
 
 <body>
-
-    <h2>Treasure Keeper</h2>
     <div class="container">
         <div class="navbar">
-            <a href="index.html">Home</a>
-            <a href="statistics.html">Statistics</a>
-            <a href="calendar.html">Calendar</a>
-            <a href="aboutus.html">About Us</a>
+
+            <div class="dropdown">
+                <button class="dropbtn">三</button>
+                <div class="dropdown-content">
+                <a href="index.html">Home</a>
+                <a href="statistics.html">Statistics</a>
+                <a href="calendar.html">Calendar</a>
+                <a href="aboutus.html">About Us</a>
+                </div>
+            </div>
+            <h2>Treasure Keeper</h2>
+        </div>
+        <!--Calendar element-->
+        <div class="calendar">
+            <div class="calendar-header">
+                <button class="prev-month">⇦</button>
+                <h3 class="month-year">March 2023</h3>
+                <button class="next-month">⇨</button>
+            </div>
+            <div class="calendar-body">
+                <div class="day-names">
+                    <div>S</div>
+                    <div>M</div>
+                    <div>T</div>
+                    <div>W</div>
+                    <div>T</div>
+                    <div>F</div>
+                    <div>S</div>
+                </div>
+                <div class="days">
+                
+                </div>
+            </div>
+        </div>
+        <br>
+        <!-- Transaction list element -->
+        <div id="transaction-list-container">
+            <h4>Income</h4>
+            <hr>
+            <ul id="income-list" class="list"></ul><br>
+            <h4>Expenses</h4>
+            <hr>
+            <ul id="expense-list" class="list"></ul><br>
+            <h4>Surplus of the Day</h4>
+            <div class="currency-control">
+                <label for="currency-select">Display Currency:</label>
+                <select id="currency-select" class="currency-select">
+                    <option value="" disabled selected>Select a Currency</option>
+                    <option value="USD">US Dollar ($)</option>
+                    <option value="AUD">Australian Dollar (A$)</option>
+                    <option value="EUR">Euro (€)</option>
+                    <option value="GBP">British Pound (£)</option>
+                    <option value="JPY">Japanese Yen (¥)</option>
+                    <option value="IDR">Indonesian Rupiah (Rp)</option>
+                </select>
+            </div>
+            <ul id="surplus-list" class="list"></ul> 
         </div>
     </div>
     

@@ -1,0 +1,500 @@
+/* Basic Reset and Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    }
+
+body {
+    background-color: #f1f8f1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    }
+
+/* Container Styles */
+.container {
+    margin: 30px auto;
+    width: 90%;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+/* Typography */
+h1 {
+    letter-spacing: 1px;
+    margin: 0;
+    overflow: auto;
+    }
+
+h2 {
+    text-align: center;
+    margin-top: 20px;
+    }
+
+h3 {
+    border-bottom: 1px solid #a5d6a7;
+    padding-bottom: 10px;
+    margin: 40px 0 10px;
+    }
+
+h4 {
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 16px;
+    color: #666;
+    }
+
+h5 {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Button Styles */
+.calendar-header button {
+    background-color: #4CAF50;
+    border: 2px solid #388E3C;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: 
+    background-color 0.3s ease, 
+    transform 0.2s ease; /* Smooth transition */
+}
+
+/* Hover effect for buttons */
+.calendar-header button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #4CAF50;
+    padding: 10px 10px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center; 
+    position: relative;
+}
+
+.navbar h2 {
+    margin: 0;
+    color: white;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    overflow: auto;
+}
+
+/* Dropdown Button */
+.dropbtn {
+    background-color: white;
+    color: #45a049;
+    font-weight: 1000;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    margin-right: auto ;
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: #005d05;
+    font-weight: 1000;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+/* Calendar Styles */
+.calendar {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.calendar-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.calendar-header .month-year {
+    font-size: 150%;
+    font-weight: 600;
+    text-align: center;
+}
+
+.calendar-body {
+    padding: 20px;
+}
+
+.day-names {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 10px;
+    font-size: 100%;
+}
+
+.day-names div {
+    width: 14.28%;
+    text-align: center;
+}
+
+.days {
+    display: flex;
+    flex-wrap: wrap;
+    width: auto;
+}
+
+.days div {
+    width: 14.28%;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for days */
+.days div:hover {
+    background-color: #f1f1f1;
+}
+
+/* Inactive and Active day styles, for current date */
+.days div.inactive {
+    background-color: #f9f9f9;
+    color: #ccc;
+    cursor: default;
+}
+
+.days div.active {
+    background-color: rgba(122, 122, 122, 0.3);
+    color: rgb(0, 0, 0);
+}
+
+/* Displaying a green or red color block for representing income or expenses */
+.days div.income::after,
+.days div.expense::after {
+    content: '';
+    position: absolute;
+    bottom: 10px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 10px;
+    border-radius: 3px;
+}
+
+.days div.income::after {
+    background-color: #45e14a;
+}
+
+.days div.expense::after {
+    background-color: #e92d2d;
+}
+
+/* Ensure the parent elements have the correct positioning */
+.days div.income,
+.days div.expense {
+    align-items: flex-start;
+    padding-top: 15px;
+    position: relative;
+}
+
+/* New style for clicked class */
+.days div.clicked {
+    background-color: #f1f1f1; /* Same as hover effect */
+}
+
+/* Transaction List */
+.list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  width: 97%; /* Align width with calendar */
+  margin: 0 auto; /* Center the list */
+}
+
+.list li {
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  color: #333;
+  display: flex;
+  position: relative;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 4px;
+  justify-content: space-between;
+}
+
+/* Transaction Colors */
+.list li.plus {
+  border-right: 10px solid #66bb6a;
+}
+
+.list li.minus {
+  border-right: 10px solid #d32f2f;
+}
+
+/* Transaction Details Container */
+.transaction-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  overflow: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Date Display */
+.transaction-date {
+  font-size: 0.85em;
+  color: #666;
+  min-width: 150px;
+  text-align: right;
+}
+
+/* Category Tag */
+.category-tag {
+  background-color: #e0f2f1;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  margin: 0 10px;
+}
+
+/* Transaction Type */
+.transaction-type {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.transaction-type.income {
+  background-color: rgba(76, 175, 80, 0.7); /* Green background with transparency */
+}
+
+.transaction-type.expense {
+  background-color: rgba(211, 47, 47, 0.7); /* Red background with transparency */
+}
+
+/* Surplus List Styles */
+.surplus-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 5px 0;
+    color: white;
+    font-weight: bold;
+    font-size: 1.5em; /* Increase font size */
+}
+
+.surplus-item .transaction-details {
+    display: flex;
+    justify-content: space-between;
+    width: 97%;
+}
+
+.surplus-item .transaction-text {
+    margin-right: 10px; /* Reduce margin */
+}
+
+.surplus-item .transaction-amount {
+    font-size: 1.2em; /* Increase font size */
+}
+
+.surplus-item.positive {
+    background-color: rgba(76, 175, 80, 0.7); /* Green background */
+}
+
+.surplus-item.negative {
+    background-color: rgba(211, 47, 47, 0.7); /* Red background */
+}
+
+.surplus-item.zero {
+    background-color: rgba(122, 122, 122, 0.3) /* Grey background */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        gap: 0px;
+    }
+
+    .navbar a {
+        margin: 5px 0;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 400px) {
+    .container {
+        width: 90%;
+        margin: 20px auto;
+    }
+
+    .list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .list li .delete-btn {
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        opacity: 1;
+    }
+}
+
+#transaction-list-container h4 {
+    font-size: 1.5em; /* Make the heading bigger */
+    text-align: left; /* Align the heading with the list */
+    margin: 20px 0 10px 0; /* Add some margin for spacing */
+    width: 97%; /* Align width with the list */
+    margin: 0 auto; /* Center the heading */
+}
+
+#transaction-list-container hr {
+    margin: 0 auto; /* Center the horizontal rule */
+    width: 97%; /* Align width with the list */
+    border: 0;
+    border-top: 1px solid #a5d6a7; /* Match the color with the one in index styles */
+}
+
+/* Updated Select Styles */
+.currency-select {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 18px;
+    border: 1px solid #a5d6a7;
+    border-radius: 6px;
+    height: 45px;
+    cursor: pointer;
+    background-color: #fff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234caf50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    padding-right: 40px;
+}
+
+/* Hover effect */
+.currency-select:hover {
+    border-color: #4caf50;
+    box-shadow: 0 1px 4px rgba(76, 175, 80, 0.2);
+}
+
+/* Focus effect */
+.currency-select:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+/* Style for dropdown options */
+.currency-select option {
+    padding: 12px;
+    font-size: 16px;
+}
+
+/* Currency Control */
+.currency-control {
+    padding-top: 10px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 97%;
+}
+
+.currency-control label {
+    font-size: 17px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.currency-select {
+    margin-top: 5px;
+}
