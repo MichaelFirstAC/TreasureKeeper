@@ -139,6 +139,10 @@ function addTransaction(e) {
         alert('Please add a category and amount');
         return;
     }
+    
+    // Store the current month in local storage
+    const currentMonth = new Date().getMonth();
+    localStorage.setItem('lastTransactionMonth', currentMonth);
 
     const transactionDate = datetime.value ? new Date(datetime.value) : new Date();
     
