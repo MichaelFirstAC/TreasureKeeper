@@ -22,17 +22,24 @@
             </div>
             <h2>Treasure Keeper</h2>
         </div>
-        
+
         <h1>Statistics</h1>
         <div id="statistics-container">
             <!-- Income and Expense statistics will be injected here -->
         </div>
-        
-        <h1>Income Pie Chart</h1>
-        <canvas id="income-pie-chart" width="50" height="50"></canvas>
 
-        <h1>Expense Pie Chart</h1>
-        <canvas id="expense-pie-chart" width="50" height="50"></canvas>
+        <div class="charts-container">
+            <div>
+                <h1>Income Pie Chart</h1>
+                <canvas id="income-pie-chart" width="50" height="50"></canvas>
+                <div id="income-legend" class="legend"></div> <!-- Income Legend -->
+            </div>
+            <div>
+                <h1>Expense Pie Chart</h1>
+                <canvas id="expense-pie-chart" width="50" height="50"></canvas>
+                <div id="expense-legend" class="legend"></div> <!-- Expense Legend -->
+            </div>
+        </div>
     </div>
     <script src="scripts/statisticsscript.js"></script>
 </body>

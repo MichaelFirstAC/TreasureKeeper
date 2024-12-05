@@ -140,6 +140,10 @@ function addTransaction(e) {
         return;
     }
 
+    // Store the current month in local storage
+    const currentMonth = new Date().getMonth();
+    localStorage.setItem('lastTransactionMonth', currentMonth);
+
     const transactionDate = datetime.value ? new Date(datetime.value) : new Date();
     
     // Check if the transaction is already in the database

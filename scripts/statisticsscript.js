@@ -1,9 +1,24 @@
 document.addEventListener("DOMContentLoaded", showStatistics);
 
+
 function showStatistics() {
     const transactions = getTransactionsFromLocalStorage();
-    updateStatistics(transactions);
-    drawPieChart(transactions);
+
+    // Get the last transaction month from local storage
+    const lastTransactionMonth = localStorage.getItem('lastTransactionMonth');
+    const currentMonth = new Date().getMonth();
+
+    // Check if the month has changed
+    if (lastTransactionMonth !== null && lastTransactionMonth != currentMonth) {
+        // Reset transactions if the month has changed
+        localStorage.removeItem('transactions'); // Clear transactions
+        localStorage.setItem('lastTransactionMonth', currentMonth); // Update the stored month
+    }
+
+    // Get updated transactions after reset
+    const updatedTransactions = getTransactionsFromLocalStorage();
+    updateStatistics(updatedTransactions);
+    drawPieChart(updatedTransactions);
 }
 
 function getTransactionsFromLocalStorage() {
@@ -44,6 +59,10 @@ function updateStatistics(transactions) {
 function drawPieChart(transactions) {
     const incomeCategories = {};
     const expenseCategories = {};
+    
+    // Define colors for income and expenses
+    const incomeColors = ['#4CAF50', '#81C784', '#A5D6A7']; // Green shades for income
+    const expenseColors = ['#d32f2f', '#ef5350', '#e57373']; // Red shades for expenses
 
     transactions.forEach(transaction => {
         if (transaction.amount > 0) {
@@ -70,21 +89,21 @@ function drawPieChart(transactions) {
     }
 
     // Income Pie Chart
-    new Chart(incomeCtx, {
+    const incomeChart = new Chart(incomeCtx, {
         type: 'pie',
         data: {
             labels: incomeLabels,
             datasets: [{
-                label: 'Income Categories',
+                label: 'Income',
                 data: incomeData,
-                backgroundColor: ['#4CAF50', '#81C784', '#A5D6A7'], // Different shades of green
+                backgroundColor: incomeColors, // Use defined colors for income
             }]
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'top',
+                    display: false // Disable default legend
                 },
                 title: {
                     display: true,
@@ -94,22 +113,25 @@ function drawPieChart(transactions) {
         }
     });
 
+    // Draw Income Legend
+    drawLegend(incomeLabels, incomeData, 'income-legend', incomeColors);
+
     // Expense Pie Chart
-    new Chart(expenseCtx, {
+    const expenseChart = new Chart(expenseCtx, {
         type: 'pie',
         data: {
             labels: expenseLabels,
             datasets: [{
-                label: 'Expense Categories',
+                label: 'Expense',
                 data: expenseData,
-                backgroundColor: ['#d32f2f', '#ef5350', '#e57373'], // Different shades of red
+                backgroundColor: expenseColors, // Use defined colors for expenses
             }]
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'top',
+                    display: false // Disable default legend
                 },
                 title: {
                     display: true,
@@ -117,5 +139,23 @@ function drawPieChart(transactions) {
                 }
             }
         }
+    });
+
+    // Draw Expense Legend
+    drawLegend(expenseLabels, expenseData, 'expense-legend', expenseColors);
+}
+
+function drawLegend(labels, data, legendId, colors) {
+    const legendContainer = document.getElementById(legendId);
+    legendContainer.innerHTML = ''; // Clear previous legends
+
+    labels.forEach((label, index) => {
+        const legendItem = document.createElement('div');
+        legendItem.className = 'legend-item';
+        legendItem.innerHTML = `
+            <span class="legend-color" style="background-color: ${colors[index % colors.length]};"></span>
+            ${label}: ${data[index].toFixed(2)}
+        `;
+        legendContainer.appendChild(legendItem);
     });
 }

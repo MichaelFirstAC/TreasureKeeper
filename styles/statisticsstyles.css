@@ -40,7 +40,7 @@ h2 {
 h3 {
     border-bottom: 1px solid #a5d6a7;
     padding-bottom: 10px;
-    margin: 40px 0 10px;
+    margin: 20px 0 10px;
 }
 
 h4 {
@@ -133,17 +133,22 @@ h5 {
 }
 
 
-.legend-color{
-    width:20px;
-    height: 20px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 10px;
+/* Styles for legends */
+.legend {
+    margin-top: 10px; /* Add some margin on top */
+    font-size: 14px; /* Set font size for legend */
 }
 
-.legend-item{
-    display: flex;
-    margin-top: 20px;
+.legend-item {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 5px; /* Space between legend items */
+}
+
+.legend-color {
+    width: 15px; /* Width of the color box */
+    height: 15px; /* Height of the color box */
+    margin-right: 10px; /* Space between color box and text */
 }
 
 .animate-pie-chart{
@@ -162,4 +167,14 @@ h5 {
         transform: scale(1);
         opacity:1;
     }
+}
+
+.charts-container {
+    display: flex; /* Use flexbox to align items */
+    justify-content: space-around; /* Space items evenly */
+    margin-top: 20px; /* Add some margin on top */
+}
+canvas {
+    max-width: 400px; /* Set a max width for each chart */
+    max-height: 400px; /* Set a max height for each chart */
 }
