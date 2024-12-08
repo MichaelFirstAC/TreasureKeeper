@@ -377,6 +377,10 @@ h5 {
     font-size: 1.2em; /* Increase font size */
 }
 
+.surplus-item.grey {
+    background-color: rgba(158, 158, 158, 0.7); /* Grey background */
+}
+
 .surplus-item.positive {
     background-color: rgba(76, 175, 80, 0.7); /* Green background */
 }
@@ -386,7 +390,7 @@ h5 {
 }
 
 .surplus-item.zero {
-    background-color: rgba(122, 122, 122, 0.3) /* Grey background */
+    background-color: rgba(174, 76, 170, 0.8) /* purple background */
 }
 
 /* Responsive design for smaller screens */
