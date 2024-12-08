@@ -237,8 +237,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 filterTransactionsByDate(selectedDate);
 
                 // Remove the 'clicked' class from the last clicked day
-                if (lastClickedDay && !lastClickedDay.classList.contains('active')) {
+                if (lastClickedDay) {
                     lastClickedDay.classList.remove('clicked');
+                    lastClickedDay.classList.remove('active-clicked'); // Remove the combined class if it exists
                 }
 
                 // Add the 'clicked' class to the currently clicked day if it's not the current date
@@ -246,7 +247,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     day.classList.add('clicked');
                     lastClickedDay = day;
                 } else {
-                    lastClickedDay = null;
+                    day.classList.add('active-clicked'); // Add the combined class if it's the current date
+                    lastClickedDay = day;
                 }
             });
 
