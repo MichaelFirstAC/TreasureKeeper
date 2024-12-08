@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update the date and time every minute
     updateDateTime();
-    setInterval(updateDateTime, 15000); // Update datetime every minute
+    setInterval(updateDateTime, 60000); // Update datetime every minute
 });
 // Initialize the app
 document.addEventListener('DOMContentLoaded', init);
