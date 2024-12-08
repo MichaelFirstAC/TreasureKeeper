@@ -182,7 +182,7 @@ h5 {
     overflow: auto; /* Add scroll bar if needed */
 }
 
-/* Styles for each chart */
+
 canvas {
     max-width: 400px; /* Set a max width for each chart */
     max-height: 400px; /* Set a max height for each chart */
