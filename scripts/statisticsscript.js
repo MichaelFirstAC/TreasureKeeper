@@ -1,8 +1,10 @@
+// Get transactions from local storage and update the statistics and pie chart
 document.addEventListener("DOMContentLoaded", () => {
     showStatistics();
     document.getElementById('currency').addEventListener('change', showStatistics);
 });
 
+// Update statistics and pie chart when the currency is changed
 function showStatistics() {
     const transactions = getTransactionsFromLocalStorage();
     const selectedCurrency = document.getElementById('currency').value;
@@ -24,28 +26,33 @@ function showStatistics() {
     drawPieChart(updatedTransactions, selectedCurrency);
 }
 
+// Show statistics
 function getCurrentMonth() {
     const date = new Date();
     return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
 }
 
+// Get transactions from local storage
 function getTransactionsFromLocalStorage() {
     const localStorageTransactions = JSON.parse(localStorage.getItem('transactions'));
     return localStorageTransactions !== null ? localStorageTransactions : [];
 }
 
+// Convert currency
 function saveTransactionsToLocalStorage(transactions, month) {
     const localStorageTransactions = JSON.parse(localStorage.getItem('transactions')) || {};
     localStorageTransactions[month] = transactions;
     localStorage.setItem('transactions', JSON.stringify(localStorageTransactions));
 }
 
+// Update statistics
 function updateStatistics(transactions, currency) {
     const totalIncome = transactions
         .filter(transaction => transaction.amount > 0)
         .reduce((acc, transaction) => acc + convertCurrency(transaction.amount, transaction.currency, currency), 0)
         .toFixed(2);
 
+    // Update statistics display
     const totalExpenses = transactions
         .filter(transaction => transaction.amount < 0)
         .reduce((acc, transaction) => acc + Math.abs(convertCurrency(transaction.amount, transaction.currency, currency)), 0)
@@ -53,6 +60,7 @@ function updateStatistics(transactions, currency) {
 
     const surplus = (totalIncome - totalExpenses).toFixed(2);
 
+    // Update statistics container
     const statisticsContainer = document.getElementById('statistics-container');
     statisticsContainer.innerHTML = `
         <div id="income-statistics">
@@ -70,6 +78,7 @@ function updateStatistics(transactions, currency) {
     `;
 }
 
+// Draw pie chart for income and expenses
 function drawPieChart(transactions, currency) {
     const incomeCategories = {};
     const expenseCategories = {};
@@ -78,6 +87,7 @@ function drawPieChart(transactions, currency) {
     const incomeColors = ['#4CAF50', '#81C784', '#A5D6A7']; // Green shades for income
     const expenseColors = ['#d32f2f', '#ef5350', '#e57373']; // Red shades for expenses
 
+    // Calculate the total income and expenses for each category
     transactions.forEach(transaction => {
         const convertedAmount = convertCurrency(transaction.amount, transaction.currency, currency);
         if (transaction.amount > 0) {
@@ -87,6 +97,7 @@ function drawPieChart(transactions, currency) {
         }
     });
 
+    // Get labels and data for income and expenses pie charts
     const incomeLabels = Object.keys(incomeCategories);
     const incomeData = Object.values(incomeCategories);
     const expenseLabels = Object.keys(expenseCategories);
@@ -136,7 +147,7 @@ function drawPieChart(transactions, currency) {
     });
 
     // Draw Income Legend
-    drawLegend(incomeLabels, 'income-legend', incomeColors);
+    drawLegend(incomeLabels, 'income-legend', incomeColors, incomeData);
 
     // Expense Pie Chart
     const expenseChart = new Chart(expenseCtx, {
@@ -171,23 +182,31 @@ function drawPieChart(transactions, currency) {
     });
 
     // Draw Expense Legend
-    drawLegend(expenseLabels, 'expense-legend', expenseColors);
+    drawLegend(expenseLabels, 'expense-legend', expenseColors, expenseData);
 }
 
-function drawLegend(labels, legendId, colors) {
+// Draw legend for pie chart
+function drawLegend(labels, legendId, colors, data) {
     const legendContainer = document.getElementById(legendId);
     legendContainer.innerHTML = '';
+
+    const total = data.reduce((acc, value) => acc + value, 0); // Calculate total
+
     labels.forEach((label, index) => {
         const legendItem = document.createElement('div');
         legendItem.classList.add('legend-item');
+
+        const percentage = ((data[index] / total) * 100).toFixed(2); // Calculate percentage
+
         legendItem.innerHTML = `
             <div class="legend-color" style="background-color: ${colors[index]};"></div>
-            <span>${label}</span>
+            <span>${label}: <span class="percentage">${percentage}%</span></span>
         `;
         legendContainer.appendChild(legendItem);
     });
 }
 
+// Convert currency
 function convertCurrency(amount, fromCurrency, toCurrency) {
     if (fromCurrency === toCurrency) {
         return amount;

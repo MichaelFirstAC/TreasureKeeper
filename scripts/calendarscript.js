@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return transactionDate === date.toDateString();
         });
 
+        // Update the transaction list
         const incomeList = document.getElementById('income-list');
         const expenseList = document.getElementById('expense-list');
         const surplusList = document.getElementById('surplus-list');
@@ -114,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let totalIncome = 0;
         let totalExpense = 0;
 
+        // Loop through the filtered transactions and display them in the appropriate list
         filteredTransactions.forEach(transaction => {
             const item = document.createElement('li');
             item.classList.add(transaction.amount < 0 ? 'minus' : 'plus');
@@ -138,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        // Update the surplus list
         const surplusItem = document.createElement('li');
         surplusItem.classList.add('surplus-item');
         const surplusValue = totalIncome - totalExpense;

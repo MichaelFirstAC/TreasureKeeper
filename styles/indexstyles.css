@@ -5,6 +5,7 @@
   padding: 0;
 }
 
+/* Body Styles */
 body {
   background-color: #f1f8f1;
   display: flex;
@@ -76,12 +77,14 @@ h5 {
     overflow: auto;
 }
 
+/* Balance Display Items */
 .inc-exp-container > div {
     flex: 1;
     text-align: center;
     padding: 20px;
 }
 
+/* Border between Income and Expense */
 .inc-exp-container > div:first-of-type {
     border-right: 2px solid #c8e6c9;
 }
@@ -94,6 +97,7 @@ h5 {
     font-weight: bold;
 }
 
+/* Money Colors */
 .money-plus {
     color: #66bb6a;
     font-size: 120%;
@@ -138,6 +142,7 @@ h5 {
   flex-direction: column;
 }
 
+/* Transaction Item */
 .list li {
   background-color: #ffffff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
@@ -159,24 +164,34 @@ h5 {
   border-right: 10px solid #d32f2f;
 }
 
+/* Filter Container */
 .filter-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-left: 10px;
+
 }
 
+/* Filter Input Styles */
 .filter-container input {
   padding: 10px;
   border: 1px solid #a5d6a7;
   border-radius: 4px;
   margin-right: 10px; /* Space between input and button */
+  flex: 1; 
+  font-size: 80%;
 }
 
+/* Filter Button Styles */
 .filter-container button {
   cursor: pointer; /* Change cursor to pointer on hover */
   background-color: #4caf50; /* Green background color */
   color: white; /* White text color */
   border: none; /* Remove border */
-  padding: 10px 15px; /* Padding for spacing */
+  padding: 8px 8px; /* Padding for spacing */
   border-radius: 5px; /* Rounded corners */
   font-size: 16px; /* Font size */
   font-weight: 600; /* Bold text */
@@ -218,6 +233,10 @@ h5 {
 
 .delete-btn:hover {
     background-color: #b71c1c; /* Darker red on hover */
+}
+
+.list li:hover .delete-btn {
+  opacity: 1;
 }
 
 /* Edit Button Styles */
@@ -306,9 +325,6 @@ button[type="submit"]:focus {
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5); /* Add a subtle shadow on focus */
 }
 
-.list li:hover .delete-btn {
-    opacity: 1;
-}
 
 /* Form Styles */
 .form-control {
@@ -514,7 +530,7 @@ input[type="datetime-local"]:focus {
 }
 
 /* Responsive Design */
-@media (max-width: 400px) {
+@media (max-width: 300px) {
   .navbar {
       flex-direction: column;
   }

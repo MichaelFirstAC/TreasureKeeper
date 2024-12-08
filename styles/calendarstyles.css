@@ -190,6 +190,7 @@ h5 {
     padding: 20px;
 }
 
+/* Day Names */
 .day-names {
     display: flex;
     justify-content: space-between;
@@ -275,72 +276,72 @@ h5 {
 
 /* Transaction List */
 .list {
-  list-style-type: none;
-  padding: 0;
-  margin-bottom: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  width: 97%; /* Align width with calendar */
-  margin: 0 auto; /* Center the list */
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    width: 97%; /* Align width with calendar */
+    margin: 0 auto; /* Center the list */
 }
 
 .list li {
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  color: #333;
-  display: flex;
-  position: relative;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 4px;
-  justify-content: space-between;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    color: #333;
+    display: flex;
+    position: relative;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    justify-content: space-between;
 }
 
 /* Transaction Colors */
 .list li.plus {
-  border-right: 10px solid #66bb6a;
+    border-right: 10px solid #66bb6a;
 }
 
 .list li.minus {
-  border-right: 10px solid #d32f2f;
+    border-right: 10px solid #d32f2f;
 }
 
 /* Transaction Details Container */
 .transaction-details {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  overflow: auto;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    overflow: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Date Display */
 .transaction-date {
-  font-size: 0.85em;
-  color: #666;
-  min-width: 150px;
-  text-align: right;
+    font-size: 0.85em;
+    color: #666;
+    min-width: 150px;
+    text-align: right;
 }
 
 /* Category Tag */
 .category-tag {
-  background-color: #e0f2f1;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.8em;
-  margin: 0 10px;
+    background-color: #e0f2f1;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 0 10px;
 }
 
 /* Transaction Type */
 .transaction-type {
-  font-weight: bold;
-  margin-right: 10px;
-  color: #fff;
-  padding: 2px 8px;
-  border-radius: 4px;
+    font-weight: bold;
+    margin-right: 10px;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
 }
 
 .transaction-type.income {
@@ -387,42 +388,6 @@ h5 {
 
 .surplus-item.zero {
     background-color: rgba(122, 122, 122, 0.3) /* Grey background */
-}
-
-/* Responsive design for smaller screens */
-@media (max-width: 600px) {
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-        gap: 0px;
-    }
-
-    .navbar a {
-        margin: 5px 0;
-        width: 100%;
-        text-align: center;
-    }
-}
-
-/* Responsive Design */
-@media (max-width: 400px) {
-    .container {
-        width: 90%;
-        margin: 20px auto;
-    }
-
-    .list li {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .list li .delete-btn {
-        position: relative;
-        top: 0;
-        left: 0;
-        transform: none;
-        opacity: 1;
-    }
 }
 
 #transaction-list-container h4 {
@@ -497,4 +462,33 @@ h5 {
 
 .currency-select {
     margin-top: 5px;
+}
+
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        gap: 0px;
+    }
+
+    .navbar a {
+        margin: 5px 0;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 300px) {
+    .container {
+        width: 90%;
+        margin: 20px auto;
+    }
+
+    .list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }

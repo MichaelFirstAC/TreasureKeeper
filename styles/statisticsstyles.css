@@ -150,6 +150,11 @@ h5 {
     margin-right: 10px; /* Space between color box and text */
 }
 
+.percentage {
+    font-weight: bold; /* Make percentage bold */
+    color: #333; /* Change color if needed */
+}
+
 .animate-pie-chart{
     animation: animate-pie-chart 1s ease-in-out;
 }
@@ -168,6 +173,7 @@ h5 {
     }
 }
 
+/* Styles for list */
 .charts-container {
     display: flex; /* Use flexbox to align items */
     justify-content: space-around; /* Space items evenly */
@@ -175,6 +181,7 @@ h5 {
     flex-wrap: wrap; /* Wrap items to the next line */
     overflow: auto; /* Add scroll bar if needed */
 }
+
 canvas {
     max-width: 400px; /* Set a max width for each chart */
     max-height: 400px; /* Set a max height for each chart */
@@ -217,9 +224,42 @@ canvas {
 
 /* Currency Control */
 #currency-selector {
-  margin: 20px 0;
+    margin: 20px 0;
 }   
 
 #currency {
-  margin-top: 5px;
+    margin-top: 5px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        gap: 0px;
+    }
+
+    .navbar a {
+        margin: 5px 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 20px;
+        text-align: center;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 300px) {
+    .container {
+        width: 90%;
+        margin: 20px auto;
+    }
+
+    .list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
