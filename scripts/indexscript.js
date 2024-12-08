@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Set datetime value to current time when the page loads
     datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`; // Format: YYYY-MM-DDTHH:MM
-});
+    init(); // Initialize the app
+    });
 
 // Currency configuration
 const DEFAULT_CURRENCY = '';
@@ -130,16 +131,6 @@ const GREEN_BOX_CLASS = 'greenbox';
 // Function to add or update a transaction
 function addTransaction(e) { // Add or update a transaction
     e.preventDefault(); // Prevent the form from submitting
-
-    // Set the current date and time in the datetime input
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-
-    datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`; // Format: YYYY-MM-DDTHH:MM
 
     const editId = document.getElementById('edit-id').value; // Get the ID for editing
 
@@ -383,10 +374,6 @@ document.addEventListener('DOMContentLoaded', () => {
     datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
     init();
     assignBoxClassesForDates();
-
-    // Update the date and time every minute
-    updateDateTime();
-    setInterval(updateDateTime, 60000); // Update datetime every minute
 });
 // Initialize the app
 document.addEventListener('DOMContentLoaded', init);
