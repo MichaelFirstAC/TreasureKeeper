@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Get references to the DOM elements
+    // DOM elements
     const daysContainer = document.querySelector('.days');
     const monthYearDisplay = document.querySelector('.month-year');
     const prevMonthButton = document.querySelector('.prev-month');
     const nextMonthButton = document.querySelector('.next-month');
     const currencySelect = document.getElementById('currency-select');
-    let currentCurrency = localStorage.getItem('currentCurrency') || 'USD';
+
+    // Getting the current currency from local storage, if it exists
+    let currentCurrency = localStorage.getItem('currentCurrency') || '';
 
     // Set the initial value of the currency select
     currencySelect.value = currentCurrency;
@@ -13,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the current date
     let currentDate = new Date();
 
-    // Currency configuration
+    // Currency symbols, taken from indexscript.js
     const currencySymbols = {
         '': '',
         'USD': '$',
@@ -24,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'IDR': 'Rp',
     };
 
-    // Define constant exchange rates
+    // Define constant exchange rates, taken from indexscript.js
     const EXCHANGE_RATES = {
         'USD': {
             'IDR': 15898.30,
@@ -76,12 +78,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Format number with commas
+    // Format number with commas as a thousand seperator, also taken from index
     function formatNumber(number) {
         return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    // Function to convert currency based on exchange rates
+    // Function to convert currency based on exchange rates, taken from index
     function convertCurrency(amount, fromCurrency, toCurrency) {
         if (fromCurrency === toCurrency) {
             return amount; // No conversion needed
@@ -93,20 +95,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to filter transactions by date
     function filterTransactionsByDate(date) {
         const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        // Create an array of transactions that match the selected date
         const filteredTransactions = transactions.filter(transaction => {
             const transactionDate = new Date(transaction.datetime).toDateString();
             return transactionDate === date.toDateString();
         });
 
-        // Update the transaction list
         const incomeList = document.getElementById('income-list');
         const expenseList = document.getElementById('expense-list');
         const surplusList = document.getElementById('surplus-list');
-
-        if (!incomeList || !expenseList || !surplusList) {
-            console.error('Transaction list elements not found');
-            return;
-        }
 
         incomeList.innerHTML = '';
         expenseList.innerHTML = '';
@@ -115,12 +112,12 @@ document.addEventListener('DOMContentLoaded', function() {
         let totalIncome = 0;
         let totalExpense = 0;
 
-        // Loop through the filtered transactions and display them in the appropriate list
         filteredTransactions.forEach(transaction => {
+            // First we create a list element, by iterating the transaction array
             const item = document.createElement('li');
             item.classList.add(transaction.amount < 0 ? 'minus' : 'plus');
-            const transactionType = transaction.amount < 0 ? 'EXPENSE' : 'INCOME';
-            const transactionTypeClass = transaction.amount < 0 ? 'expense' : 'income';
+            const transactionType = transaction.amount < 0 ? 'EXPENSE' : 'INCOME'; // For writing in the html
+            const transactionTypeClass = transaction.amount < 0 ? 'expense' : 'income'; // For the class so that it can be styled
             item.innerHTML = `
                 <div class="transaction-details">
                     <span class="transaction-type ${transactionTypeClass}">${transactionType}</span>
@@ -130,7 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span class="transaction-date">${new Date(transaction.datetime).toLocaleString()}</span>
                 </div>
             `;
-
+            
+            // Then we append the elements accordingly, income or expense
             if (transaction.amount < 0) {
                 expenseList.appendChild(item);
                 totalExpense += Math.abs(convertCurrency(transaction.amount, transaction.originalCurrency, currentCurrency));
@@ -140,11 +138,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Update the surplus list
+        // Create a list for surplusItem
         const surplusItem = document.createElement('li');
         surplusItem.classList.add('surplus-item');
-        const surplusValue = totalIncome - totalExpense;
-        if (surplusValue > 0) {
+        const surplusValue = totalIncome - totalExpense; // Assign the value with Income total - Expense total
+        // Assigns the class based on the surplus value
+        if (filteredTransactions.length === 0) {
+            surplusItem.classList.add('grey');
+        } else if (surplusValue > 0) {
             surplusItem.classList.add('positive');
         } else if (surplusValue < 0) {
             surplusItem.classList.add('negative');
@@ -162,17 +163,21 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update the box class based on the surplus value
         const dateKey = date.toDateString();
         const dateClasses = JSON.parse(localStorage.getItem('dateClasses')) || {};
-        if (surplusValue > 0) {
+        if (filteredTransactions.length === 0) {
+            delete dateClasses[dateKey];
+        } else if (surplusValue > 0) {
             dateClasses[dateKey] = 'greenbox';
         } else if (surplusValue < 0) {
             dateClasses[dateKey] = 'redbox';
-        } else {
-            delete dateClasses[dateKey];
+        } else if (surplusValue === 0) {
+            dateClasses[dateKey] = 'purplebox';
         }
         localStorage.setItem('dateClasses', JSON.stringify(dateClasses));
     }
 
-    // Function to update the currency display
+    let lastClickedDay = null; // Initialize the last clicked day to null
+
+    // Function to update the currency display, when user clicks a certain date
     function updateCurrencyDisplay(selectedCurrency) {
         currentCurrency = selectedCurrency;
         localStorage.setItem('currentCurrency', currentCurrency);
@@ -180,11 +185,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(lastClickedDay.textContent));
             filterTransactionsByDate(selectedDate);
         } else {
-            filterTransactionsByDate(new Date());
+            filterTransactionsByDate(new Date()); // If no date is selected, show transactions for the current date
         }
-    }
-
-    let lastClickedDay = null;
+    } 
 
     // Function to render the calendar
     function renderCalendar() {
@@ -205,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fill in the days from the previous month
         for (let i = firstDayOfMonth; i > 0; i--) {
             const day = document.createElement('div');
-            day.classList.add('inactive');
+            day.classList.add('inactive'); // inactive class is for differing between the dates of the current month and the other months
             day.textContent = lastDayOfLastMonth - i + 1;
             daysContainer.appendChild(day);
         }
