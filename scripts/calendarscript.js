@@ -175,7 +175,9 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('dateClasses', JSON.stringify(dateClasses));
     }
 
-    // Function to update the currency display
+    let lastClickedDay = null; // Initialize the last clicked day to null
+
+    // Function to update the currency display, when user clicks a certain date
     function updateCurrencyDisplay(selectedCurrency) {
         currentCurrency = selectedCurrency;
         localStorage.setItem('currentCurrency', currentCurrency);
@@ -183,11 +185,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(lastClickedDay.textContent));
             filterTransactionsByDate(selectedDate);
         } else {
-            filterTransactionsByDate(new Date());
+            filterTransactionsByDate(new Date()); // If no date is selected, show transactions for the current date
         }
-    }
-
-    let lastClickedDay = null;
+    } 
 
     // Function to render the calendar
     function renderCalendar() {
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fill in the days from the previous month
         for (let i = firstDayOfMonth; i > 0; i--) {
             const day = document.createElement('div');
-            day.classList.add('inactive');
+            day.classList.add('inactive'); // inactive class is for differing between the dates of the current month and the other months
             day.textContent = lastDayOfLastMonth - i + 1;
             daysContainer.appendChild(day);
         }
