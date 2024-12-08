@@ -11,6 +11,19 @@ const category = document.getElementById('category');
 const currencySelect = document.getElementById('currency-select');
 const datetime = document.getElementById('datetime');
 
+// Set default datetime value to current time when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    const now = new Date(); // Get current date and time
+    const year = now.getFullYear(); // Get current year
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Get current month (01-12)
+    const day = String(now.getDate()).padStart(2, '0'); // Get current day (01-31)
+    const hours = String(now.getHours()).padStart(2, '0'); // Get current hours (00-23)
+    const minutes = String(now.getMinutes()).padStart(2, '0'); // Get current minutes (00-59)
+    
+    // Set datetime value to current time when the page loads
+    datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`; // Format: YYYY-MM-DDTHH:MM
+});
+
 // Currency configuration
 const DEFAULT_CURRENCY = '';
 const currencySymbols = {
@@ -75,21 +88,6 @@ const EXCHANGE_RATES = {
     }
 };
 
-
-// Set default datetime value to current time when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-const now = new Date(); // Get current date and time
-const year = now.getFullYear(); // Get current year
-const month = String(now.getMonth() + 1).padStart(2, '0'); // Get current month (01-12)
-const day = String(now.getDate()).padStart(2, '0'); // Get current day (01-31)
-const hours = String(now.getHours()).padStart(2, '0'); // Get current hours (00-23)
-const minutes = String(now.getMinutes()).padStart(2, '0'); // Get current minutes (00-59)
-
-// Set datetime value to current time when the page loads
-datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`; // Format: YYYY-MM-DDTHH:MM
-init();
-});
-
 // Get transactions from localStorage
 const localStorageTransactions = JSON.parse(localStorage.getItem('transactions')); // Get transactions from localStorage
 let transactions = localStorage.getItem('transactions') !== null ? localStorageTransactions : []; // Transaction
@@ -132,6 +130,16 @@ const GREEN_BOX_CLASS = 'greenbox';
 // Function to add or update a transaction
 function addTransaction(e) { // Add or update a transaction
     e.preventDefault(); // Prevent the form from submitting
+
+    // Set the current date and time in the datetime input
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`; // Format: YYYY-MM-DDTHH:MM
 
     const editId = document.getElementById('edit-id').value; // Get the ID for editing
 
@@ -375,6 +383,10 @@ document.addEventListener('DOMContentLoaded', () => {
     datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
     init();
     assignBoxClassesForDates();
+
+    // Update the date and time every minute
+    updateDateTime();
+    setInterval(updateDateTime, 15000); // Update datetime every minute
 });
 // Initialize the app
 document.addEventListener('DOMContentLoaded', init);
