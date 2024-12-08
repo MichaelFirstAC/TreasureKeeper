@@ -91,7 +91,7 @@ function drawPieChart(transactions, currency) {
     ]; // Green, Blue, Violet shades for income
     const expenseColors = [
         '#d32f2f', '#ef5350', '#e57373', '#f44336', '#e53935', 
-        '#FF9800', '#FFB74D', '#FFCC80', '#FB8C00', '#F57C00'
+        '#FF9800', '#FFB74D', '#FFCC80', '#FB8C00', '#F57C00',
         '#FFEB3B', '#FFF176', '#FFF59D', '#FFEE58', '#FFEB3B', 
     ]; // Red, Yellow, Orange shades for expenses
 
