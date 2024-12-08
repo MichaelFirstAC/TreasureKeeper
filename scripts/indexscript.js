@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Set datetime value to current time when the page loads
     datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`; // Format: YYYY-MM-DDTHH:MM
-    init(); // Initialize the app
+    init
     });
 
 // Currency configuration
