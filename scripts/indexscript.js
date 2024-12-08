@@ -78,21 +78,22 @@ const EXCHANGE_RATES = {
 
 // Set default datetime value to current time when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-const now = new Date();
-const year = now.getFullYear();
-const month = String(now.getMonth() + 1).padStart(2, '0');
-const day = String(now.getDate()).padStart(2, '0');
-const hours = String(now.getHours()).padStart(2, '0');
-const minutes = String(now.getMinutes()).padStart(2, '0');
+const now = new Date(); // Get current date and time
+const year = now.getFullYear(); // Get current year
+const month = String(now.getMonth() + 1).padStart(2, '0'); // Get current month (01-12)
+const day = String(now.getDate()).padStart(2, '0'); // Get current day (01-31)
+const hours = String(now.getHours()).padStart(2, '0'); // Get current hours (00-23)
+const minutes = String(now.getMinutes()).padStart(2, '0'); // Get current minutes (00-59)
 
-datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+// Set datetime value to current time when the page loads
+datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`; // Format: YYYY-MM-DDTHH:MM
 init();
 });
 
 // Get transactions from localStorage
-const localStorageTransactions = JSON.parse(localStorage.getItem('transactions'));
-let transactions = localStorage.getItem('transactions') !== null ? localStorageTransactions : [];
-let currentCurrency = localStorage.getItem('currentCurrency') || DEFAULT_CURRENCY;
+const localStorageTransactions = JSON.parse(localStorage.getItem('transactions')); // Get transactions from localStorage
+let transactions = localStorage.getItem('transactions') !== null ? localStorageTransactions : []; // Transaction
+let currentCurrency = localStorage.getItem('currentCurrency') || DEFAULT_CURRENCY; // Get current currency from localStorage or set to default
 
 // If you want to check if currentCurrency is empty and set it to a default
 if (!currentCurrency) {
@@ -115,12 +116,12 @@ function formatNumber(number) {
 function editTransaction(id) {
     const transaction = transactions.find(t => t.id === id);
     if (transaction) {
-        document.getElementById('edit-id').value = transaction.id;
-        document.getElementById('text').value = transaction.text;
-        document.getElementById('category').value = transaction.category;
-        document.getElementById('amount').value = Math.abs(transaction.amount);
-        document.getElementById('type').value = transaction.amount < 0 ? 'expense' : 'income';
-        document.getElementById('datetime').value = transaction.datetime.split('T')[0] + 'T' + transaction.datetime.split('T')[1];
+        document.getElementById('edit-id').value = transaction.id; // Set the ID for editing
+        document.getElementById('text').value = transaction.text; // Set the text for editing
+        document.getElementById('category').value = transaction.category; // Set the category for editing
+        document.getElementById('amount').value = Math.abs(transaction.amount); // Set the amount for editing
+        document.getElementById('type').value = transaction.amount < 0 ? 'expense' : 'income'; // Set the type for editing
+        document.getElementById('datetime').value = transaction.datetime.split('T')[0] + 'T' + transaction.datetime.split('T')[1]; // Set the datetime for editing
     }
 }
 
@@ -129,10 +130,10 @@ const RED_BOX_CLASS = 'redbox';
 const GREEN_BOX_CLASS = 'greenbox';
 
 // Function to add or update a transaction
-function addTransaction(e) {
-    e.preventDefault();
+function addTransaction(e) { // Add or update a transaction
+    e.preventDefault(); // Prevent the form from submitting
 
-    const editId = document.getElementById('edit-id').value;
+    const editId = document.getElementById('edit-id').value; // Get the ID for editing
 
     // Check if required fields are filled (amount and category only)
     if (amount.value.trim() === '' || category.value.trim() === '') {
@@ -141,9 +142,10 @@ function addTransaction(e) {
     }
     
     // Store the current month in local storage
-    const currentMonth = new Date().getMonth();
-    localStorage.setItem('lastTransactionMonth', currentMonth);
+    const currentMonth = new Date().getMonth(); // Get the current month
+    localStorage.setItem('lastTransactionMonth', currentMonth); // Store the current month
 
+    // Get the transaction date
     const transactionDate = datetime.value ? new Date(datetime.value) : new Date();
     
     // Check if the transaction is already in the database
@@ -157,6 +159,7 @@ function addTransaction(e) {
         datetime: transactionDate.toISOString()
     };
 
+    // Update the transaction in the transactions array
     if (editId) {
         transactions = transactions.map(t => (t.id === transaction.id ? transaction : t));
     } else {
@@ -315,17 +318,6 @@ async function updateCurrencyDisplay(selectedCurrency) {
 
     if (loadingIndicator) loadingIndicator.classList.remove('active');
 }
-
-// Refresh button
-document.addEventListener('DOMContentLoaded', () => {
-    const refreshBtn = document.getElementById('refresh-btn');
-
-    if (refreshBtn) {
-        refreshBtn.addEventListener('click', () => {
-            window.location.reload();
-        });
-    }
-});
 
 // Initialize app
 function init() {
