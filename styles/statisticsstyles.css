@@ -182,11 +182,13 @@ h5 {
     overflow: auto; /* Add scroll bar if needed */
 }
 
+/* Styles for each chart */
 canvas {
     max-width: 400px; /* Set a max width for each chart */
     max-height: 400px; /* Set a max height for each chart */
 }
 
+/* Styles for list */
 #currency {
     width: 100%;
     padding: 12px 15px;
@@ -199,7 +201,8 @@ canvas {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234caf50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-image: 
+    url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234caf50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 20px;

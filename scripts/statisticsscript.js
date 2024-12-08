@@ -84,8 +84,16 @@ function drawPieChart(transactions, currency) {
     const expenseCategories = {};
     
     // Define colors for income and expenses
-    const incomeColors = ['#4CAF50', '#81C784', '#A5D6A7']; // Green shades for income
-    const expenseColors = ['#d32f2f', '#ef5350', '#e57373']; // Red shades for expenses
+    const incomeColors = [
+        '#4CAF50', '#81C784', '#A5D6A7', '#66BB6A', '#388E3C', 
+        '#2196F3', '#64B5F6', '#BBDEFB', '#1976D2', '#0D47A1', 
+        '#8E24AA', '#BA68C8', '#E1BEE7', '#7B1FA2', '#4A148C'
+    ]; // Green, Blue, Violet shades for income
+    const expenseColors = [
+        '#d32f2f', '#ef5350', '#e57373', '#f44336', '#e53935', 
+        '#FFEB3B', '#FFF176', '#FFF59D', '#FFEE58', '#FFEB3B', 
+        '#FF9800', '#FFB74D', '#FFCC80', '#FB8C00', '#F57C00'
+    ]; // Red, Yellow, Orange shades for expenses
 
     // Calculate the total income and expenses for each category
     transactions.forEach(transaction => {
