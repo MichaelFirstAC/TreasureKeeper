@@ -239,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Remove the 'clicked' class from the last clicked day
                 if (lastClickedDay && !lastClickedDay.classList.contains('active')) {
                     lastClickedDay.classList.remove('clicked');
+                    lastClickedDay.classList.remove('active-clicked'); // Remove the combined class if it exists
                 }
 
                 // Add the 'clicked' class to the currently clicked day if it's not the current date
@@ -247,6 +248,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     lastClickedDay = day;
                 } else {
                     lastClickedDay = null;
+                    day.classList.add('active-clicked'); // Add the combined class if it's the current date
+                    lastClickedDay = day;
                 }
             });
 
