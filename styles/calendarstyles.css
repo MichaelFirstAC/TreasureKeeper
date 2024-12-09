@@ -236,8 +236,22 @@ h5 {
 }
 
 .days div.active {
-    background-color: rgba(122, 122, 122, 0.3);
+    background-color: rgba(0, 174, 255, 0.291);
     color: rgb(0, 0, 0);
+}
+
+/* New style for clicked class */
+.days div.clicked {
+    background-color: rgba(57, 156, 255, 0.12); 
+    border-width: 0.2em;
+    border-color: rgba(0, 174, 255, 0.291);
+    border-style: groove;
+}
+
+.days div.active-clicked {
+    border-width: 0.2em;
+    border-color: rgba(0, 174, 255, 0.291);
+    border-style: groove;
 }
 
 /* Displaying a green or red color block for representing income or expenses */
@@ -267,11 +281,6 @@ h5 {
     align-items: flex-start;
     padding-top: 15px;
     position: relative;
-}
-
-/* New style for clicked class */
-.days div.clicked {
-    background-color: #f1f1f1; /* Same as hover effect */
 }
 
 /* Transaction List */
