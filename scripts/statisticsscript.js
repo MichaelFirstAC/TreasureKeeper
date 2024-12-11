@@ -1,7 +1,15 @@
 // Get transactions from local storage and update the statistics and pie chart
 document.addEventListener("DOMContentLoaded", () => {
+    const savedCurrency = localStorage.getItem('selectedCurrency');
+    if (savedCurrency) {
+        document.getElementById('currency').value = savedCurrency;
+    }
     showStatistics();
-    document.getElementById('currency').addEventListener('change', showStatistics);
+    document.getElementById('currency').addEventListener('change', () => {
+        const selectedCurrency = document.getElementById('currency').value;
+        localStorage.setItem('selectedCurrency', selectedCurrency);
+        showStatistics();
+    });
 
     // Toggle dropdown content
     document.querySelector('.dropbtn').addEventListener('click', function(event) {
@@ -33,8 +41,8 @@ function showStatistics() {
 
     // Get updated transactions after reset
     const updatedTransactions = getTransactionsFromLocalStorage();
-    updateStatistics(updatedTransactions, selectedCurrency);
-    drawPieChart(updatedTransactions, selectedCurrency);
+    updateStatistics(transactions, selectedCurrency); // Use original transactions
+    drawPieChart(transactions, selectedCurrency); // Use original transactions
 }
 
 // Show statistics
@@ -56,6 +64,11 @@ function saveTransactionsToLocalStorage(transactions, month) {
     localStorage.setItem('transactions', JSON.stringify(localStorageTransactions));
 }
 
+// Format number with commas as thousand separators
+function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 // Update statistics
 function updateStatistics(transactions, currency) {
     const totalIncome = transactions
@@ -63,7 +76,6 @@ function updateStatistics(transactions, currency) {
         .reduce((acc, transaction) => acc + convertCurrency(transaction.amount, transaction.currency, currency), 0)
         .toFixed(2);
 
-    // Update statistics display
     const totalExpenses = transactions
         .filter(transaction => transaction.amount < 0)
         .reduce((acc, transaction) => acc + Math.abs(convertCurrency(transaction.amount, transaction.currency, currency)), 0)
@@ -71,20 +83,22 @@ function updateStatistics(transactions, currency) {
 
     const surplus = (totalIncome - totalExpenses).toFixed(2);
 
-    // Update statistics container
+    const incomeClass = totalIncome >= 0 ? 'positive' : 'negative';
+    const surplusClass = surplus >= 0 ? 'positive' : 'negative';
+
     const statisticsContainer = document.getElementById('statistics-container');
     statisticsContainer.innerHTML = `
         <div id="income-statistics">
             <h3>Income Statistics</h3>
-            <p>Total Income: ${currencySymbols[currency]}${totalIncome}</p>
+            <p class="${incomeClass}">Total Income: ${currencySymbols[currency]}${formatNumberWithCommas(totalIncome)}</p>
         </div>
         <div id="expense-statistics">
             <h3>Expense Statistics</h3>
-            <p>Total Expenses: ${currencySymbols[currency]}${totalExpenses}</p>
+            <p>Total Expenses: ${currencySymbols[currency]}${formatNumberWithCommas(totalExpenses)}</p>
         </div>
         <div id="surplus-statistics">
             <h3>Surplus</h3>
-            <p>Surplus: ${currencySymbols[currency]}${surplus}</p>
+            <p class="${surplusClass}">Surplus: ${currencySymbols[currency]}${formatNumberWithCommas(surplus)}</p>
         </div>
     `;
 }
@@ -219,7 +233,7 @@ function drawLegend(labels, legendId, colors, data) {
 
         legendItem.innerHTML = `
             <div class="legend-color" style="background-color: ${colors[index]};"></div>
-            <span>${label}: <span class="percentage">${percentage}%</span></span>
+            <span>${label}: <span class="percentage">${formatNumberWithCommas(percentage)}%</span></span>
         `;
         legendContainer.appendChild(legendItem);
     });

@@ -238,6 +238,30 @@ canvas {
     margin-top: 5px;
 }
 
+#income-statistics p{
+    font-size: large;
+    font-weight: bold;
+}
+
+#expense-statistics p{
+    font-size: large;
+    font-weight: bold;
+    color: #d32f2f;
+}
+
+#surplus-statistics p{
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.positive {
+    color: #66bb6a;
+}
+
+.negative {
+    color: #d32f2f;
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
     .navbar {

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const currencySelect = document.getElementById('currency-select');
 
     // Getting the current currency from local storage, if it exists
-    let currentCurrency = localStorage.getItem('currentCurrency') || '';
+    let currentCurrency = localStorage.getItem('selectedCurrency') || '';
 
     // Set the initial value of the currency select
     currencySelect.value = currentCurrency;
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to update the currency display, when user clicks a certain date
     function updateCurrencyDisplay(selectedCurrency) {
         currentCurrency = selectedCurrency;
-        localStorage.setItem('currentCurrency', currentCurrency);
+        localStorage.setItem('selectedCurrency', currentCurrency); // Save the selected currency to local storage
         if (lastClickedDay) {
             const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(lastClickedDay.textContent));
             filterTransactionsByDate(selectedDate);
@@ -236,10 +236,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const selectedDate = new Date(year, month, i);
                 filterTransactionsByDate(selectedDate);
 
-                // Remove the 'clicked' class from the last clicked day
-                if (lastClickedDay && !lastClickedDay.classList.contains('active')) {
+                // Remove the 'clicked' and 'active' classes from the last clicked day
+                if (lastClickedDay) {
                     lastClickedDay.classList.remove('clicked');
                     lastClickedDay.classList.remove('active-clicked'); // Remove the combined class if it exists
+                    if (lastClickedDay.classList.contains('active')) {
+                        lastClickedDay.classList.remove('clicked');
+                    }
                 }
 
                 // Add the 'clicked' class to the currently clicked day if it's not the current date
@@ -252,7 +255,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     lastClickedDay = day;
                 }
             });
-
             daysContainer.appendChild(day);
         }
 

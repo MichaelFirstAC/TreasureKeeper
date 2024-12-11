@@ -108,7 +108,7 @@ function generateID() {
 
 // Format number with commas
 function formatNumber(number) {
-    return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // REGULAR EXPRESSION CHANGE TO DFA
 }
 
 // Function to edit a transaction
@@ -118,7 +118,11 @@ function editTransaction(id) {
         document.getElementById('edit-id').value = transaction.id; // Set the ID for editing
         document.getElementById('text').value = transaction.text; // Set the text for editing
         document.getElementById('category').value = transaction.category; // Set the category for editing
-        document.getElementById('amount').value = Math.abs(transaction.amount); // Set the amount for editing
+        
+        // Display the exact same number with the same formatting in the amount bar
+        const formattedAmount = formatNumber(Math.abs(transaction.amount));
+        document.getElementById('amount').value = formattedAmount; // Set the amount for editing
+        
         document.getElementById('type').value = transaction.amount < 0 ? 'expense' : 'income'; // Set the type for editing
         
         // Correct formatting of the date and time, for editing the value
@@ -155,12 +159,15 @@ function addTransaction(e) { // Add or update a transaction
     // Get the transaction date
     const transactionDate = datetime.value ? new Date(datetime.value) : new Date();
     
+    // Parse the amount value as a number
+    const parsedAmount = parseFloat(amount.value.replace(/,/g, ''));
+
     // Check if the transaction is already in the database
     const transaction = {
         id: editId ? parseInt(editId) : generateID(),
         text: text.value, 
         category: category.value, 
-        amount: type.value === 'income' ? +amount.value : -amount.value,
+        amount: type.value === 'income' ? parsedAmount : -parsedAmount,
         currency: currentCurrency, // Keep the current currency
         originalCurrency: currentCurrency, // Store original currency
         datetime: transactionDate.toISOString()
@@ -188,6 +195,9 @@ function addTransaction(e) { // Add or update a transaction
     assignBoxClassesForDates(); // Update box classes for dates
     
     init(); // This will sort and display the transactions
+
+    // Refresh the website
+    window.location.reload();
 }
 
 // Format date function
@@ -333,8 +343,29 @@ async function updateCurrencyDisplay(selectedCurrency) {
     if (loadingIndicator) loadingIndicator.classList.remove('active');
 }
 
+// Input field formatting
+var inputField = amount;
+inputField.oninput = function() {
+    var removeChar = this.value.replace(/[^0-9.]/g, ''); // This is to remove alphabets and special characters.
+    var dotCount = (removeChar.match(/\./g) || []).length; // Count the number of dots
+    if (dotCount > 1) {
+        removeChar = removeChar.slice(0, -1); // Remove the last character if it's a dot and there's already one dot
+    }
+    this.value = removeChar;
+
+    var parts = this.value.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Add commas only to the left of the dot
+    this.value = parts.join('.');
+};
+
 // Initialize app
 function init() {
+    // Retrieve selected currency from localStorage
+    const savedCurrency = localStorage.getItem('selectedCurrency');
+    if (savedCurrency) {
+        currencySelect.value = savedCurrency;
+        currentCurrency = savedCurrency;
+    }
     // Sort transactions by datetime in descending order (most recent first)
     transactions.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
 
@@ -345,7 +376,10 @@ function init() {
 
 // Event listeners
 form.addEventListener('submit', addTransaction);
-currencySelect.addEventListener('change', (e) => updateCurrencyDisplay(e.target.value));
+currencySelect.addEventListener('change', (e) => {
+    updateCurrencyDisplay(e.target.value);
+    localStorage.setItem('selectedCurrency', e.target.value); // Save selected currency to localStorage
+});
 
 // Function to assign box classes for each unique date and store in local storage
 async function assignBoxClassesForDates() {
