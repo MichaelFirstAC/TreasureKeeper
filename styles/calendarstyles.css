@@ -477,6 +477,10 @@ h5 {
     margin-top: 5px;
 }
 
+/* Active state for dropdown content */
+.dropdown-content.show {
+    display: block;
+}
 
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {

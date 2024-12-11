@@ -120,7 +120,15 @@ function editTransaction(id) {
         document.getElementById('category').value = transaction.category; // Set the category for editing
         document.getElementById('amount').value = Math.abs(transaction.amount); // Set the amount for editing
         document.getElementById('type').value = transaction.amount < 0 ? 'expense' : 'income'; // Set the type for editing
-        document.getElementById('datetime').value = transaction.datetime.split('T')[0] + 'T' + transaction.datetime.split('T')[1]; // Set the datetime for editing
+        
+        // Correct formatting of the date and time, for editing the value
+        const date = new Date(transaction.datetime);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        document.getElementById('datetime').value = `${year}-${month}-${day}T${hours}:${minutes}`; // Set the datetime for editing
     }
 }
 
@@ -259,6 +267,13 @@ function updateValues() {
     balance.innerHTML = `${currencySymbols[currentCurrency]}${formatNumber(parseFloat(total))}`;
     money_plus.innerHTML = `+${currencySymbols[currentCurrency]}${formatNumber(parseFloat(income))}`;
     money_minus.innerHTML = `-${currencySymbols[currentCurrency]}${formatNumber(parseFloat(expense))}`;
+
+    // Change color based on balance value, using direct styling by javascript
+    if (parseFloat(total) >= 0) {
+        balance.style.color = '#2e7d32';
+    } else {
+        balance.style.color = '#d32f2f';
+    }
 }
 
 // Function to convert currency based on exchange rates
@@ -375,6 +390,18 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
     assignBoxClassesForDates();
 });
+
+// Toggle dropdown content
+document.querySelector('.dropbtn').addEventListener('click', function(event) {
+    event.stopPropagation();
+    document.querySelector('.dropdown-content').classList.toggle('show');
+});
+
+// Close dropdown content when clicking outside
+document.addEventListener('click', function() {
+    document.querySelector('.dropdown-content').classList.remove('show');
+});
+
 // Initialize the app
 document.addEventListener('DOMContentLoaded', init);
 

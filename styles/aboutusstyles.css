@@ -107,6 +107,10 @@ h5 {
     z-index: 1; /* Z index */
 }
 
+.dropdown-content.show {
+    display: block;
+}
+
 /* Links inside the dropdown */
 .dropdown-content a {
     color: #005d05; /* Color */
