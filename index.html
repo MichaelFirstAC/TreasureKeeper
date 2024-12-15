@@ -68,15 +68,26 @@
         </div>
       </h3>
 
+      <button id="show-full-list-btn">Show Full List</button>
+      <div id="selection-buttons" style="display: flex; flex-direction: row;">
+        <div style="display: flex; gap: 0.6em;">
+          <button id="delete-selection-btn" class="filter-btn">Delete Selection</button>
+          <button id="cancel-selection-btn" class="filter-btn">Cancel Selection</button>
+        </div>
+        <button id="select-all-btn" class="filter-btn">Select All</button>
+      </div>
+
       <ul id="list" class="list">
-          <li class="minus">
-              <button class="delete-btn"></button>
-          </li>
+        <!-- Transactions will be dynamically added here -->
       </ul>
+
+      <!-- Show More and Show Less buttons -->
+      <button id="show-more-btn" class="show-more-btn-class">Show More</button>
+      <button id="show-less-btn" class="show-less-btn-class" style="display: none;">Show Less</button>
 
       <h3>Add New Transaction</h3>
       
-      <form id="form">
+      <form id="form" autocomplete="off">
         <input type="hidden" id="edit-id" value="">
 
         <div class="form-control">

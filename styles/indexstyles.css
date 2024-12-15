@@ -163,6 +163,17 @@ h5 {
   border-right: 10px solid #d32f2f;
 }
 
+/* Selected Transaction */
+.list li.selected {
+  background-color: #e0f7fa;
+  border-left: 10px solid #00acc1;
+}
+
+/* Hide delete button when there is at least one selected transaction */
+.list li.selected ~ li .delete-btn {
+  display: none;
+}
+
 /* Filter Container */
 .filter-container {
   display: flex;
@@ -185,7 +196,8 @@ h5 {
 }
 
 /* Filter Button Styles */
-.filter-container button {
+.filter-container button,
+#show-all-btn, #delete-selection-btn, #cancel-selection-btn, #select-all-btn {
   cursor: pointer; /* Change cursor to pointer on hover */
   background-color: #4caf50; /* Green background color */
   color: white; /* White text color */
@@ -198,9 +210,38 @@ h5 {
 }
 
 /* Hover effect for the filter button */
-.filter-container button:hover {
+.filter-container button:hover,
+#show-all-btn:hover,
+#delete-selection-btn:hover,
+#cancel-selection-btn:hover, #select-all-btn:hover {
   background-color: #45a049; /* Darker green on hover */
   transform: scale(1.02); /* Slightly increase size on hover */
+}
+
+#delete-selection-btn {
+  background-color: #ce1c1c !important;
+  margin-right: 0.6em !important;
+}
+
+#delete-selection-btn:hover {
+  background-color: #b71c1c !important;
+}
+
+#cancel-selection-btn {
+  background-color: #f57c00 !important;
+}
+
+#cancel-selection-btn:hover {
+  background-color: #e7590c !important;
+}
+
+#select-all-btn {
+  background-color: #649cf1 !important; /* Red background color */
+  margin-left: auto; /* Push the button to the very right */
+}
+
+#select-all-btn:hover {
+  background-color: #3f84ec !important; /* Red background color */
 }
 
 /* Delete Button */
@@ -476,6 +517,80 @@ input[type="datetime-local"]:focus {
 /* Adjust container to accommodate navbar */
 .container {
   margin-top: 20px;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal-content button {
+  margin: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.modal-content button:hover {
+  background-color: #ddd;
+}
+
+/* Show More Button Styles */
+.show-more-btn-class,
+.show-less-btn-class {
+  color: #0066CC; /* Blue text color */
+  background-color: transparent; /* No background color */
+  border: none; /* No border */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 16px; /* Font size */
+  font-weight: bold; /* Bold text */
+  text-align: center; /* Center text */
+  display: block; /* Block display */
+  margin: 20px auto; /* Center horizontally with margin */
+}
+
+/* Hover effect for Show More and Show Less buttons */
+.show-more-btn-class:hover,
+.show-less-btn-class:hover {
+  text-decoration: underline; /* Underline text on hover */
+}
+
+/* ...existing code... */
+
+#show-full-list-btn {
+  cursor: pointer; /* Change cursor to pointer on hover */
+  background-color: #4caf50; /* Green background color */
+  color: white; /* White text color */
+  border: none; /* Remove border */
+  padding: 8px 8px; /* Padding for spacing */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 16px; /* Font size */
+  font-weight: 600; /* Bold text */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition effects */
+}
+
+#show-full-list-btn:hover {
+  background-color: #45a049; /* Darker green on hover */
+  transform: scale(1.02); /* Slightly increase size on hover */
 }
 
 /* Responsive design for smaller screens */

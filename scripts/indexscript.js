@@ -212,6 +212,8 @@ const options = {
 return new Date(dateString).toLocaleString(undefined, options);
 }
 
+let isSelecting = false; // Flag to indicate if selection mode is active
+
 // Function to add transaction to DOM
 function addTransactionDOM(transaction) {
     const item = document.createElement("li");
@@ -219,7 +221,7 @@ function addTransactionDOM(transaction) {
     item.classList.add(transaction.amount < 0 ? "minus" : "plus");
 
     item.innerHTML = `
-        <button class="delete-btn" onclick="removeTransaction(${transaction.id})"></button>
+        <button class="delete-btn" onclick="showDeleteSelectModal(${transaction.id})"></button>
         <button class="edit-btn" onclick="editTransaction(${transaction.id})"></button>
         <div class="transaction-details">
             <span class="transaction-text">${transaction.text}</span>
@@ -229,8 +231,172 @@ function addTransactionDOM(transaction) {
         </div>
     `;
 
+    item.addEventListener('click', () => {
+        if (isSelecting) {
+            toggleSelectTransaction(transaction.id);
+        }
+    });
+
     list.appendChild(item);
 }
+
+// Function to show delete/select modal
+function showDeleteSelectModal(id) {
+    const modal = document.createElement('div');
+    modal.classList.add('modal');
+    modal.innerHTML = `
+        <div class="modal-content">
+            <p>What would you like to do with this transaction?</p>
+            <button onclick="confirmDeleteTransaction(${id})">Delete this transaction</button>
+            <button onclick="toggleSelectTransaction(${id}); closeModal()">Select transaction to delete</button>
+            <button onclick="closeModal()">Cancel</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+// Function to close modal
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Function to confirm delete transaction (singular)
+function confirmDeleteTransaction(id) {
+    const isConfirmed = confirm("Are you sure to delete this transaction? You will not be able to retrieve the data back!");
+    if (isConfirmed) {
+        removeTransaction(id);
+    }
+}
+
+// Function to confirm delete selected transactions (plural)
+function confirmDeleteSelectedTransactions() {
+    const isConfirmed = confirm("Are you sure to delete these transactions? You will not be able to retrieve the data back!");
+    if (isConfirmed) {
+        deleteSelectedTransactions();
+    }
+}
+
+// Function to toggle selection of a transaction
+function toggleSelectTransaction(id) {
+    // Show full list of transactions when entering select mode only if "Show All Transactions" button does not exist
+    if (!isSelecting && !document.getElementById('show-all-btn')) {
+        transactionsToShow = transactions.length; // Set the number of transactions to show to the total number of transactions
+        list.innerHTML = ""; // Clear the current transaction list
+        transactions.forEach(addTransactionDOM); // Add all transactions to the DOM
+        updateValues(); // Update balance, income, and expense
+
+        // Hide the "Show More" button
+        document.getElementById('show-more-btn').style.display = 'none';
+        // Show the "Show Less" button
+        document.getElementById('show-less-btn').style.display = 'none';
+        // Hide the "Show Full List" button
+        document.getElementById('show-full-list-btn').style.display = 'none';
+    }
+
+    const transactionElement = document.querySelector(`li button.delete-btn[onclick="showDeleteSelectModal(${id})"]`).parentElement;
+    const isSelected = transactionElement.classList.contains('selected');
+
+    // Prevent deselecting the only one remaining selected item
+    if (isSelected && document.querySelectorAll('.list li.selected').length === 1) {
+        return;
+    }
+
+    transactionElement.classList.toggle('selected');
+    isSelecting = true; // Enable selection mode
+    document.getElementById('selection-buttons').style.display = 'flex'; // Show the selection buttons
+
+    // Hide delete buttons when there is at least one selected transaction
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(button => {
+        button.style.display = 'none';
+    });
+
+    // Hide calendar and filter button when in select mode
+    document.getElementById('filter-date').style.display = 'none';
+    document.getElementById('filter-btn').style.display = 'none';
+
+    // Check if no transactions are selected
+    const selectedTransactions = document.querySelectorAll('.list li.selected');
+    if (selectedTransactions.length === 0) {
+        exitSelectionMode();
+    } else {
+        // Remove the "Show All Transactions" button if one transaction is selected
+        const showAllBtn = document.getElementById('show-all-btn');
+        if (showAllBtn) {
+            showAllBtn.remove();
+        }
+    }
+
+    // Hide the "Select All" button if all transactions are selected
+    const transactionItems = document.querySelectorAll('.list li');
+    if (Array.from(transactionItems).every(item => item.classList.contains('selected'))) {
+        document.getElementById('select-all-btn').style.display = 'none';
+    } else {
+        document.getElementById('select-all-btn').style.display = 'flex';
+    }
+}
+
+// Function to delete selected transactions
+function deleteSelectedTransactions() {
+    const selectedTransactions = document.querySelectorAll('.list li.selected');
+    selectedTransactions.forEach(transactionElement => {
+        const id = parseInt(transactionElement.querySelector('.delete-btn').getAttribute('onclick').match(/\d+/)[0]);
+        transactions = transactions.filter(transaction => transaction.id !== id);
+    });
+    updateLocalStorage();
+    window.location.reload();
+}
+
+// Function to cancel selection process
+function cancelSelection() {
+    const selectedTransactions = document.querySelectorAll('.list li.selected');
+    selectedTransactions.forEach(transactionElement => {
+        transactionElement.classList.remove('selected');
+    });
+    exitSelectionMode();
+
+    // Bring back the "Show All Transactions" button if there is a value in the calendar date
+    const filterDate = document.getElementById('filter-date').value;
+    if (filterDate) {
+        list.innerHTML += `<button id="show-all-btn" class="show-all-btn-class">Show All Dates</button>`;
+        document.getElementById('show-all-btn').addEventListener('click', () => {
+            window.location.reload(); // Refresh the page when the Show All Transaction button is pressed
+        });
+    }
+
+    // Call filterTransactionsByDate with the same date
+    if (filterDate) {
+        filterTransactionsByDate(filterDate);
+    }
+    if (!document.getElementById('show-all-btn')) {
+        window.location.reload(); // Refresh the page after canceling selection if "Show All Transactions" button is hidden
+    }
+}
+
+// Function to exit selection mode
+function exitSelectionMode() {
+    isSelecting = false; // Disable selection mode
+    document.getElementById('selection-buttons').style.display = 'none'; // Hide the selection buttons
+
+    // Show delete buttons
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(button => {
+        button.style.display = 'flex';
+    });
+
+    // Show calendar and filter button when exiting select mode
+    document.getElementById('filter-date').style.display = 'flex';
+    document.getElementById('filter-btn').style.display = 'flex';
+}
+
+// Event listener for "Delete Selected" button
+document.getElementById('delete-selection-btn').addEventListener('click', confirmDeleteSelectedTransactions);
+
+// Event listener for "Cancel Selection" button
+document.getElementById('cancel-selection-btn').addEventListener('click', cancelSelection);
 
 // Function to filter transactions by selected date
 function filterTransactionsByDate(selectedDate) {
@@ -244,6 +410,27 @@ function filterTransactionsByDate(selectedDate) {
 
     // Add filtered transactions to the DOM
     filteredTransactions.forEach(addTransactionDOM);
+
+    // Add "Show All Transactions" button
+    list.innerHTML += `<button id="show-all-btn" class="show-all-btn-class">Show All Dates</button>`;
+    document.getElementById('show-all-btn').addEventListener('click', () => {
+        window.location.reload(); // Refresh the page when the Show All Transaction button is pressed
+    });
+
+    // Hide the "Show More", "Show Less", and "Show Full List" buttons
+    document.getElementById('show-more-btn').style.display = 'none';
+    document.getElementById('show-less-btn').style.display = 'none';
+    document.getElementById('show-full-list-btn').style.display = 'none';
+
+    // Add event listeners for selection mode
+    const transactionItems = document.querySelectorAll('.list li');
+    transactionItems.forEach(item => {
+        item.addEventListener('click', () => {
+            if (isSelecting) {
+                toggleSelectTransaction(parseInt(item.querySelector('.delete-btn').getAttribute('onclick').match(/\d+/)[0]));
+            }
+        });
+    });
 }
 
 // Event listener for filter button
@@ -297,15 +484,10 @@ function convertCurrency(amount, fromCurrency, toCurrency) {
 
 // Remove transaction
 function removeTransaction(id) {
-    // Ask for confirmation before deleting
-    const isConfirmed = confirm("Are you sure you want to delete this transaction?");
-    
-    if (isConfirmed) {
-        // Filter out the transaction with the given ID
-        transactions = transactions.filter(transaction => transaction.id !== id);
-        updateLocalStorage(); // Update local storage after removal
-        window.location.reload(); // Refresh the page after deletion
-    }
+    // Filter out the transaction with the given ID
+    transactions = transactions.filter(transaction => transaction.id !== id);
+    updateLocalStorage(); // Update local storage after removal
+    window.location.reload(); // Refresh the page after deletion
 }
 
 // Update localStorage
@@ -358,6 +540,62 @@ inputField.oninput = function() {
     this.value = parts.join('.');
 };
 
+let transactionsToShow = 8; // Number of transactions to show initially
+
+// Function to add transaction to DOM with limit
+function addTransactionDOMWithLimit(transaction, index) {
+    if (index < transactionsToShow) {
+        addTransactionDOM(transaction);
+    }
+}
+
+// Function to show more transactions
+function showMoreTransactions() {
+    transactionsToShow += 8; // Increase the number of transactions to show by 8
+    list.innerHTML = ""; // Clear the current transaction list
+    transactions.forEach(addTransactionDOMWithLimit); // Add transactions to the DOM with the new limit
+    updateValues(); // Update balance, income, and expense
+
+    // Hide the "Show More" button if all transactions are displayed
+    if (transactionsToShow >= transactions.length) {
+        document.getElementById('show-more-btn').style.display = 'none';
+        document.getElementById('show-less-btn').style.display = 'flex'; // Show the "Show Less" button
+        document.getElementById('show-full-list-btn').style.display = 'none'; // Hide the "Show Full List" button
+    }
+}
+
+// Function to show less transactions
+function showLessTransactions() {
+    transactionsToShow = 8; // Reset the number of transactions to show
+    list.innerHTML = ""; // Clear the current transaction list
+    transactions.forEach(addTransactionDOMWithLimit); // Add transactions to the DOM with the new limit
+    updateValues(); // Update balance, income, and expense
+
+    // Show the "Show More" button if there are more transactions to show
+    if (transactions.length > transactionsToShow) {
+        document.getElementById('show-more-btn').style.display = 'flex';
+    }
+
+    // Hide the "Show Less" button
+    document.getElementById('show-less-btn').style.display = 'none';
+    document.getElementById('show-full-list-btn').style.display = 'flex'; // Show the "Show Full List" button
+}
+
+// Function to show full list of transactions
+function showFullList() {
+    transactionsToShow = transactions.length; // Set the number of transactions to show to the total number of transactions
+    list.innerHTML = ""; // Clear the current transaction list
+    transactions.forEach(addTransactionDOM); // Add all transactions to the DOM
+    updateValues(); // Update balance, income, and expense
+
+    // Hide the "Show More" button
+    document.getElementById('show-more-btn').style.display = 'none';
+    // Show the "Show Less" button
+    document.getElementById('show-less-btn').style.display = 'flex';
+    // Hide the "Show Full List" button
+    document.getElementById('show-full-list-btn').style.display = 'none';
+}
+
 // Initialize app
 function init() {
     // Retrieve selected currency from localStorage
@@ -370,15 +608,74 @@ function init() {
     transactions.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
 
     list.innerHTML = "";
-    transactions.forEach(addTransactionDOM);
+    transactions.forEach(addTransactionDOMWithLimit); // Add transactions to the DOM with limit
     updateValues();
+    
+    // Remove the "Show All Transactions" button if it exists
+    const showAllBtn = document.getElementById('show-all-btn');
+    if (showAllBtn) {
+        showAllBtn.remove();
+    }
+
+    // Show or hide the "Show More", "Show Less", and "Show Full List" buttons based on the number of transactions
+    if (transactions.length > transactionsToShow) {
+        document.getElementById('show-more-btn').style.display = 'flex';
+        document.getElementById('show-less-btn').style.display = 'none';
+        document.getElementById('show-full-list-btn').style.display = 'flex';
+    } else {
+        document.getElementById('show-more-btn').style.display = 'none';
+        document.getElementById('show-less-btn').style.display = 'none';
+        document.getElementById('show-full-list-btn').style.display = 'none';
+    }
+
+    // Hide the "Show More" and "Show Less" buttons if the calendar date is not empty
+    const filterDate = document.getElementById('filter-date').value;
+    if (filterDate) {
+        document.getElementById('show-more-btn').style.display = 'none';
+        document.getElementById('show-less-btn').style.display = 'none';
+    }
+
+    // Ensure selection buttons are hidden initially
+    document.getElementById('selection-buttons').style.display = 'none';
+}
+
+// Save form data to localStorage
+function saveFormData() {
+    const formData = {
+        category: category.value,
+        type: type.value,
+        datetime: datetime.value
+    };
+    localStorage.setItem('formData', JSON.stringify(formData));
+}
+
+// Load form data from localStorage
+function loadFormData() {
+    const formData = JSON.parse(localStorage.getItem('formData'));
+    if (formData) {
+        category.value = formData.category;
+        type.value = formData.type;
+        datetime.value = formData.datetime;
+    }
 }
 
 // Event listeners
+document.getElementById('show-more-btn').addEventListener('click', showMoreTransactions);
+document.getElementById('show-less-btn').addEventListener('click', showLessTransactions);
+document.getElementById('show-full-list-btn').addEventListener('click', showFullList);
 form.addEventListener('submit', addTransaction);
 currencySelect.addEventListener('change', (e) => {
     updateCurrencyDisplay(e.target.value);
     localStorage.setItem('selectedCurrency', e.target.value); // Save selected currency to localStorage
+});
+
+// Save form data on input change
+form.addEventListener('input', saveFormData);
+
+// Load form data on page load
+document.addEventListener('DOMContentLoaded', () => {
+    loadFormData();
+    // ...existing code...
 });
 
 // Function to assign box classes for each unique date and store in local storage
@@ -435,6 +732,37 @@ document.querySelector('.dropbtn').addEventListener('click', function(event) {
 document.addEventListener('click', function() {
     document.querySelector('.dropdown-content').classList.remove('show');
 });
+
+// Function to toggle selection of all transactions
+function toggleSelectAllTransactions() {
+    const transactionItems = document.querySelectorAll('.list li');
+    const allSelected = Array.from(transactionItems).every(item => item.classList.contains('selected'));
+
+    transactionItems.forEach(item => {
+        if (allSelected) {
+            item.classList.remove('selected');
+        } else {
+            item.classList.add('selected');
+        }
+    });
+
+    if (allSelected) {
+        exitSelectionMode();
+    } else {
+        isSelecting = true;
+        document.getElementById('selection-buttons').style.display = 'flex';
+    }
+
+    // Hide the "Select All" button if all transactions are selected
+    if (Array.from(transactionItems).every(item => item.classList.contains('selected'))) {
+        document.getElementById('select-all-btn').style.display = 'none';
+    } else {
+        document.getElementById('select-all-btn').style.display = 'flex';
+    }
+}
+
+// Event listener for "Select All" button
+document.getElementById('select-all-btn').addEventListener('click', toggleSelectAllTransactions);
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', init);
