@@ -554,8 +554,9 @@ input[type="datetime-local"]:focus {
 .modal-content p {
   display: flex;
   justify-content: center;
-  font-size: 1.6em;
+  font-size: 1.5em;
 }
+
 .modal-content button.delete-btn-modal {
   background-color: #ce1c1c;
 }

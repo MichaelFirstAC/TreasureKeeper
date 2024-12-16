@@ -168,8 +168,8 @@ h5 {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background-color: #4CAF50;
     color: white;
+    background-color: rgba(77, 176, 145, 0.933)
 }
 
 .calendar-header button {
