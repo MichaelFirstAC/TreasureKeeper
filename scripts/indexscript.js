@@ -120,7 +120,8 @@ function editTransaction(id) {
         
         // Display the exact same number with the same formatting in the amount bar
         const formattedAmount = formatNumber(Math.abs(transaction.amount));
-        document.getElementById('amount').value = formattedAmount; // Set the amount for editing
+        const currencySymbol = currencySymbols[transaction.originalCurrency];
+        document.getElementById('amount').value = `${currencySymbol}${formattedAmount}`; // Set the amount for editing
         
         document.getElementById('type').value = transaction.amount < 0 ? 'expense' : 'income'; // Set the type for editing
         
@@ -132,12 +133,57 @@ function editTransaction(id) {
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
         document.getElementById('datetime').value = `${year}-${month}-${day}T${hours}:${minutes}`; // Set the datetime for editing
+        
+        // Scroll to the bottom of the page with animation
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+        });
     }
 }
 
 // Constants for red and green box classes NEW ADDITION TO THE INDEX JS
 const RED_BOX_CLASS = 'redbox';
 const GREEN_BOX_CLASS = 'greenbox';
+
+// Function to show toast notification
+function showToast(message, date, amount) {
+    const toast = document.createElement('div');
+    toast.classList.add('toast');
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
+
+    const amountColor = amount.startsWith('-') ? 'red' : 'green';
+
+    toast.innerHTML = `
+        <div class="toast-header">
+            <strong class="me-auto">Notification</strong>
+            <button type="button" class="btn-close" aria-label="Close">×</button>
+        </div>
+        <div class="toast-body">
+            ${message}<br>
+            <div class="toast-date">
+                Date: ${date}&nbsp;
+                <div class="toast-amount" style="color: ${amountColor};">
+                    Amount: ${amount}
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(toast);
+
+    // Automatically remove the toast after 5 seconds
+    setTimeout(() => {
+        toast.remove();
+    }, 5000);
+
+    // Close button functionality
+    toast.querySelector('.btn-close').addEventListener('click', () => {
+        toast.remove();
+    });
+}
 
 // Function to add or update a transaction
 function addTransaction(e) { // Add or update a transaction
@@ -158,8 +204,8 @@ function addTransaction(e) { // Add or update a transaction
     // Get the transaction date
     const transactionDate = datetime.value ? new Date(datetime.value) : new Date();
     
-    // Parse the amount value as a number
-    const parsedAmount = parseFloat(amount.value.replace(/,/g, ''));
+    // Parse the amount value as a number, removing any currency symbols
+    const parsedAmount = parseFloat(amount.value.replace(/[^0-9.-]+/g, ''));
 
     // Check if the transaction is already in the database
     const transaction = {
@@ -183,6 +229,13 @@ function addTransaction(e) { // Add or update a transaction
     updateValues();
     updateLocalStorage();
 
+    // Set flag in localStorage to show toast notification after reload
+    localStorage.setItem('showToast', JSON.stringify({
+        message: 'Transaction Successfully Added!',
+        date: formatDate(transaction.datetime),
+        amount: `${transaction.amount < 0 ? '-' : '+'}${currencySymbols[transaction.originalCurrency]}${formatNumber(Math.abs(transaction.amount))}`
+    }));
+
     // Reset form
     text.value = '';
     amount.value = '';
@@ -199,6 +252,15 @@ function addTransaction(e) { // Add or update a transaction
     window.location.reload();
 }
 
+// Function to check and show toast notification on page load
+function checkAndShowToast() {
+    const toastData = JSON.parse(localStorage.getItem('showToast'));
+    if (toastData) {
+        showToast(toastData.message, toastData.date, toastData.amount);
+        localStorage.removeItem('showToast'); // Remove the flag after showing the toast
+    }
+}
+
 // Format date function
 function formatDateTime(dateString) {
 const options = {
@@ -213,6 +275,12 @@ return new Date(dateString).toLocaleString(undefined, options);
 
 let isSelecting = false; // Flag to indicate if selection mode is active
 
+// Function to format date without time
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
 // Function to add transaction to DOM
 function addTransactionDOM(transaction) {
     const item = document.createElement("li");
@@ -225,8 +293,8 @@ function addTransactionDOM(transaction) {
         <div class="transaction-details">
             <span class="transaction-text">${transaction.text}</span>
             <span class="category-tag">${transaction.category}</span>
-            <span class="transaction-amount">${currencySymbols[transaction.originalCurrency]}${formatNumber(Math.abs(transaction.amount))}</span>
-            <span class="transaction-date">${formatDateTime(transaction.datetime)}</span>
+            <span class="transaction-amount">${transaction.amount < 0 ? '-' : '+'}${currencySymbols[transaction.originalCurrency]}${formatNumber(Math.abs(transaction.amount))}</span>
+            <span class="transaction-date">${formatDate(transaction.datetime)}</span>
         </div>
     `;
 
@@ -668,6 +736,7 @@ form.addEventListener('submit', addTransaction);
 currencySelect.addEventListener('change', (e) => {
     updateCurrencyDisplay(e.target.value);
     localStorage.setItem('selectedCurrency', e.target.value); // Save selected currency to localStorage
+    window.location.reload(); // Reload the window when the currency display is changed
 });
 
 // Save form data on input change
@@ -678,6 +747,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFormData();
     init();
     assignBoxClassesForDates();
+    checkAndShowToast(); // Check and show toast notification if needed
 });
 
 // Function to assign box classes for each unique date and store in local storage
@@ -754,4 +824,32 @@ document.getElementById('select-all-btn').addEventListener('click', toggleSelect
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', init);
+
+// Update the placeholder with the current currency symbol
+document.addEventListener('DOMContentLoaded', () => {
+    const currencySelect = document.getElementById('currency-select');
+    const amountInput = document.getElementById('amount');
+    const updatePlaceholder = () => {
+        const selectedCurrency = currencySelect.value;
+        const currencySymbols = {
+            'USD': '$',
+            'AUD': 'A$',
+            'EUR': '€',
+            'GBP': '£',
+            'JPY': '¥',
+            'IDR': 'Rp',
+        };
+        amountInput.placeholder = `Enter amount (${currencySymbols[selectedCurrency] || ''})`;
+    };
+    currencySelect.addEventListener('change', updatePlaceholder);
+    updatePlaceholder(); // Initial call to set the placeholder
+});
+
+// Prevent user from deleting the currency symbol
+document.getElementById('amount').addEventListener('input', function() {
+    const currencySymbol = this.placeholder.match(/\(([^)]+)\)/)[1];
+    if (!this.value.startsWith(currencySymbol)) {
+        this.value = currencySymbol + this.value.replace(currencySymbol, '');
+    }
+});
 

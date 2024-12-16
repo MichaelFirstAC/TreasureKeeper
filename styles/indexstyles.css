@@ -26,6 +26,11 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
+.container h2 {
+  display: flex !important;
+  font-size: 1.5em !important;
+}
+
 /* Typography */
 h1 {
   letter-spacing: 1px;
@@ -620,6 +625,79 @@ input[type="datetime-local"]:focus {
   transform: scale(1.02); /* Slightly increase size on hover */
 }
 
+/* Toast Notification Styles */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 250px;
+  z-index: 1050;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 8px; /* Smoother border */
+  overflow: hidden; /* Ensure content stays within rounded corners */
+}
+
+.toast-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  border-top-left-radius: 8px; /* Match border radius */
+  border-top-right-radius: 8px; /* Match border radius */
+}
+
+.toast-body {
+  padding: 1rem;
+  font-size: 1.4em;
+  background-color: #ffffff;
+  color: #45a049;
+  border-bottom-left-radius: 8px; /* Match border radius */
+  border-bottom-right-radius: 8px; /* Match border radius */
+}
+
+.toast-date{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: black;
+  font-size: larger;
+}
+
+.toast-amount {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.toast-date-amount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  gap: 10px; /* Add some space between date and amount */
+}
+
+.toast-date,
+.toast-amount {
+  font-size: inherit; /* Ensure both date and amount have the same font size */
+}
+
+.toast .btn-close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  line-height: 1;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.toast .btn-close:hover {
+  opacity: 1;
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
   .navbar {
@@ -646,6 +724,12 @@ input[type="datetime-local"]:focus {
       width: 100%;
       text-align: center;
   }
+
+  .container h2 {
+    display: flex !important;
+    font-size: 1.3em !important;
+    padding: auto !important;
+  }
 }
 
 /* Responsive Design */
@@ -661,7 +745,7 @@ input[type="datetime-local"]:focus {
   }
 
   .container {
-      padding: 10px;
+      padding: auto;
   }
 
   #balance, #money-plus, #money-minus {
