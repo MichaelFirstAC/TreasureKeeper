@@ -548,16 +548,41 @@ input[type="datetime-local"]:focus {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  color: white;
 }
 
-.modal-content button:hover {
-  background-color: #ddd;
+.modal-content p {
+  display: flex;
+  justify-content: center;
+  font-size: 1.6em;
+}
+.modal-content button.delete-btn-modal {
+  background-color: #ce1c1c;
+}
+
+.modal-content button.delete-btn-modal:hover {
+  background-color: #b71c1c;
+}
+
+.modal-content button.select-btn-modal {
+  background-color: #649cf1;
+}
+
+.modal-content button.select-btn-modal:hover {
+  background-color: #3f84ec;
+}
+
+.modal-content button.cancel-btn-modal {
+  background-color: #f57c00;
+}
+
+.modal-content button.cancel-btn-modal:hover {
+  background-color: #e7590c;
 }
 
 /* Show More Button Styles */
-.show-more-btn-class,
-.show-less-btn-class {
-  color: #0066CC; /* Blue text color */
+.show-more-btn-class, .show-less-btn-class{
+  color: #1b7cde; /* Blue text color */
   background-color: transparent; /* No background color */
   border: none; /* No border */
   cursor: pointer; /* Pointer cursor on hover */
@@ -569,12 +594,13 @@ input[type="datetime-local"]:focus {
 }
 
 /* Hover effect for Show More and Show Less buttons */
-.show-more-btn-class:hover,
-.show-less-btn-class:hover {
+.show-more-btn-class:hover, .show-less-btn-class:hover{
   text-decoration: underline; /* Underline text on hover */
 }
 
-/* ...existing code... */
+.show-less-btn-class {
+  color: #00264c !important; /* Dark blue text color */
+}
 
 #show-full-list-btn {
   cursor: pointer; /* Change cursor to pointer on hover */
@@ -661,5 +687,26 @@ input[type="datetime-local"]:focus {
       left: 0;
       transform: none;
       opacity: 1;
+  }
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+  #selection-buttons {
+    flex-direction: column;
+    gap: 10px; /* Add consistent gap between buttons */
+  }
+
+  #selection-buttons > div {
+    flex-direction: column;
+    gap: 10px; /* Add consistent gap between buttons */
+  }
+
+  #select-all-btn {
+    margin-right: 0; /* Remove margin to ensure consistent spacing */
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    padding: 5px 10px;
   }
 }

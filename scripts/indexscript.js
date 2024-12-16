@@ -11,8 +11,8 @@ const category = document.getElementById('category');
 const currencySelect = document.getElementById('currency-select');
 const datetime = document.getElementById('datetime');
 
-// Set default datetime value to current time when the page loads
-document.addEventListener('DOMContentLoaded', () => {
+// Function to set default datetime value to current time
+function setDefaultDateTime() {
     const now = new Date(); // Get current date and time
     const year = now.getFullYear(); // Get current year
     const month = String(now.getMonth() + 1).padStart(2, '0'); // Get current month (01-12)
@@ -20,10 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const hours = String(now.getHours()).padStart(2, '0'); // Get current hours (00-23)
     const minutes = String(now.getMinutes()).padStart(2, '0'); // Get current minutes (00-59)
     
-    // Set datetime value to current time when the page loads
+    // Set datetime value to current time
     datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`; // Format: YYYY-MM-DDTHH:MM
-    init
-    });
+}
 
 // Currency configuration
 const DEFAULT_CURRENCY = '';
@@ -51,7 +50,7 @@ const EXCHANGE_RATES = {
         'IDR': 10275.89, // 1 AUD = 10275.89 IDR
         'EUR': 0.61, // 1 AUD = 0.61 EUR
         'GBP': 0.51, // 1 AUD = 0.51 GBP
-        'JPY': 99.74, // 1 AUD = 99.74 JPY
+        'JPY': 99.74, // 1 AUD = 0.010 AUD
         'USD': 0.65, // 1 AUD = 0.65 USD
         'AUD': 1 // 1 AUD = 1 AUD
     },
@@ -246,10 +245,10 @@ function showDeleteSelectModal(id) {
     modal.classList.add('modal');
     modal.innerHTML = `
         <div class="modal-content">
-            <p>What would you like to do with this transaction?</p>
-            <button onclick="confirmDeleteTransaction(${id})">Delete this transaction</button>
-            <button onclick="toggleSelectTransaction(${id}); closeModal()">Select transaction to delete</button>
-            <button onclick="closeModal()">Cancel</button>
+            <br><p>What would you like to do with this transaction?</p><br>
+            <button class="delete-btn-modal" onclick="confirmDeleteTransaction(${id})">Delete this transaction</button>
+            <button class="select-btn-modal" onclick="toggleSelectTransaction(${id}); closeModal()">Select transaction to delete</button>
+            <button class="cancel-btn-modal" onclick="closeModal()">Cancel</button>
         </div>
     `;
     document.body.appendChild(modal);
@@ -644,7 +643,7 @@ function saveFormData() {
     const formData = {
         category: category.value,
         type: type.value,
-        datetime: datetime.value
+        datetime: datetime.value,
     };
     localStorage.setItem('formData', JSON.stringify(formData));
 }
@@ -656,6 +655,8 @@ function loadFormData() {
         category.value = formData.category;
         type.value = formData.type;
         datetime.value = formData.datetime;
+    } else {
+        setDefaultDateTime(); // Set default datetime if no formData in localStorage
     }
 }
 
@@ -675,7 +676,8 @@ form.addEventListener('input', saveFormData);
 // Load form data on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadFormData();
-    // ...existing code...
+    init();
+    assignBoxClassesForDates();
 });
 
 // Function to assign box classes for each unique date and store in local storage
@@ -707,20 +709,6 @@ async function assignBoxClassesForDates() {
     // Store date classes in local storage
     localStorage.setItem('dateClasses', JSON.stringify(dateClasses));
 }
-
-// Example usage of assignBoxClassesForDates
-document.addEventListener('DOMContentLoaded', () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-
-    datetime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-    init();
-    assignBoxClassesForDates();
-});
 
 // Toggle dropdown content
 document.querySelector('.dropbtn').addEventListener('click', function(event) {
