@@ -36,7 +36,7 @@ Treasure Keeper is a slick web app that helps users track their pockets, make ca
 
 ### Contributors
 
-- Michael Arianno Chandrarieta - 2802499711
-- Harris Ekaputra Suryadi - 2802400502
-- Barri Nur Pratama - 2802501142
+- Michael Arianno Chandrarieta (Lead Dev - Home Page + Functions, About Us Page) - 2802499711
+- Harris Ekaputra Suryadi (Editor - Statistics Page + Functions)- 2802400502 
+- Barri Nur Pratama (Debugger, Designer - Calendar Page + Functions)- 2802501142
 
