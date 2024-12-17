@@ -23,7 +23,6 @@ Treasure Keeper is a slick web app that helps users track their pockets, make ca
 
 * HTML5 for the foundation and layout of the web pages.
 * CSS3 for styling and responsiveness, with Flexbox adding some serious layout flex.
-* Bootstrap was used in the app for quick, beautiful, and mobile-friendly UI components.
 * JavaScript brings it to life, handling dynamic features like form handling, local storage, and sweet data visualizations.
 * Fonts from Google Fonts give it the perfect finishing touch.
 
