@@ -257,6 +257,7 @@ canvas {
 #surplus-statistics p{
     font-size: 2em;
     font-weight: bold;
+    overflow: auto;
 }
 
 .positive {
